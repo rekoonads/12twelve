@@ -4,10 +4,19 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ChevronRight, Star, Menu } from "lucide-react";
+import {
+  ChevronRight,
+  Star,
+  Menu,
+  Facebook,
+  Twitter,
+  Instagram,
+  Youtube,
+} from "lucide-react";
 import Image from "next/image";
 import About from "./About";
 import WhyChooseUs from "./WhyChooseUs";
+import Blog from "./Blog";
 
 export default function FrontPage() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -100,10 +109,10 @@ export default function FrontPage() {
               Portfolio
             </a>
             <a
-              href="#testimonials"
+              href="#blog"
               className="text-sm font-medium hover:text-primary transition-colors"
             >
-              Testimonials
+              Blog
             </a>
             <a
               href="#contact"
@@ -137,7 +146,6 @@ export default function FrontPage() {
               <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
-          <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent"></div>
         </section>
 
         <section>
@@ -161,7 +169,7 @@ export default function FrontPage() {
                   title: "Search engine optimization",
                   description:
                     "Achieve measurable success with performance-driven marketing campaigns, designed to deliver ROI through precise targeting and data analysis.",
-                  logo: "/performance.png", // Example logo path
+                  logo: "/seo.png", // Example logo path
                 },
                 {
                   title: "Influencer Marketing",
@@ -179,13 +187,13 @@ export default function FrontPage() {
                   title: "YouTube Monetisation",
                   description:
                     "Boost your online presence with strategic social media ads that target the right audience, driving clicks and conversions like never before.",
-                  logo: "/advertising.png", // Example logo path
+                  logo: "/youtube.png", // Example logo path
                 },
                 {
                   title: "Press Release",
                   description:
                     "Dominate search engines and increase visibility with expertly managed Google Ads campaigns designed to bring in qualified traffic and leads.",
-                  logo: "/googleads.png", // Example logo path
+                  logo: "/press.png", // Example logo path
                 },
               ].map((service, index) => (
                 <div
@@ -246,7 +254,7 @@ export default function FrontPage() {
           </div>
         </section>
 
-        <section id="testimonials" className="py-20 bg-gray-50">
+        {/* <section id="testimonials" className="py-20 bg-gray-50">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
               What Our Clients Say
@@ -286,6 +294,10 @@ export default function FrontPage() {
               </div>
             </div>
           </div>
+        </section> */}
+
+        <section id="blog">
+          <Blog />
         </section>
 
         <section
@@ -345,8 +357,42 @@ export default function FrontPage() {
                 Terms of Service
               </a>
             </nav>
+            <div className="flex space-x-4 mb-4 md:mb-0">
+              <a
+                href="https://www.facebook.com/12otwelve"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white hover:text-emerald-400 transition-colors"
+              >
+                <Facebook />
+              </a>
+              <a
+                href="https://www.twitter.com/12otwelve"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white hover:text-emerald-400 transition-colors"
+              >
+                <Twitter />
+              </a>
+              <a
+                href="https://www.instagram.com/12otwelve"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white hover:text-emerald-400 transition-colors"
+              >
+                <Instagram />
+              </a>
+              <a
+                href="https://www.youtube.com/12otwelve"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white hover:text-emerald-400 transition-colors"
+              >
+                <Youtube />
+              </a>
+            </div>
             <div className="text-sm text-gray-400">
-              © 2024 12otwelve. All rights reserved.
+              © 2024 12twelve. All rights reserved.
             </div>
           </div>
         </div>
