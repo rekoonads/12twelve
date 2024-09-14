@@ -78,13 +78,13 @@ export default function FrontPage() {
   return (
     <div className="flex flex-col min-h-[100dvh]">
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${
           isScrolled ? "bg-purple-600 shadow-xl" : "bg-transparent"
         }`}
       >
         <div className="container mx-auto p-2 flex items-center justify-between">
           <a href="#" className="text-2xl font-bold text-primary">
-            <Image src={"/logo.png"} alt="Twelve" width={80} height={80} />
+            <Image src={"/logo.png"} alt="Twelve" width={120} height={120} />
           </a>
           <nav className="hidden md:flex space-x-8 text-white">
             <a
@@ -335,7 +335,7 @@ export default function FrontPage() {
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="text-2xl font-bold mb-4 md:mb-0">
-              <Image src={"/logo.png"} alt="Twelve" height={80} width={80} />
+              <Image src={"/logo.png"} alt="Twelve" height={120} width={120} />
             </div>
             <nav className="flex space-x-4 mb-4 md:mb-0">
               <a href="#" className="hover:text-emerald-400 transition-colors">
