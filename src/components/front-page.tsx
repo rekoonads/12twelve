@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ChevronRight, Star, Menu } from "lucide-react";
 import Image from "next/image";
+import About from "./About";
+import WhyChooseUs from "./WhyChooseUs";
 
 export default function FrontPage() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -43,13 +45,13 @@ export default function FrontPage() {
   const portfolioImages = [
     {
       src: "/project1.jpg",
-      alt: "Social Media Marketing",
-      title: "Social Media Marketing",
+      alt: "Social Media Marketing/management",
+      title: "Social Media Marketing/management",
     },
     {
       src: "/project2.jpg",
-      alt: "Performance Marketing",
-      title: "Performance Marketing",
+      alt: "Search engine optimization ",
+      title: "Search engine optimization ",
     },
     {
       src: "/project3.jpg",
@@ -63,13 +65,13 @@ export default function FrontPage() {
     },
     {
       src: "/project5.jpg",
-      alt: "Social media advertising",
-      title: "Social media advertising",
+      alt: "YouTube Monetisation",
+      title: "YouTube Monetisation",
     },
     {
       src: "/project6.jpg",
-      alt: "Google Ads",
-      title: "Google Ads",
+      alt: "Press Release",
+      title: "Press Release",
     },
   ];
 
@@ -77,14 +79,14 @@ export default function FrontPage() {
     <div className="flex flex-col min-h-[100dvh]">
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled ? "bg-white shadow-md" : "bg-transparent"
+          isScrolled ? "bg-purple-600 shadow-xl" : "bg-transparent"
         }`}
       >
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="container mx-auto p-2 flex items-center justify-between">
           <a href="#" className="text-2xl font-bold text-primary">
-            <Image src={"/twelve.jpg"} alt="Twelve" width={60} height={60} />
+            <Image src={"/logo.png"} alt="Twelve" width={80} height={80} />
           </a>
-          <nav className="hidden md:flex space-x-8">
+          <nav className="hidden md:flex space-x-8 text-white">
             <a
               href="#services"
               className="text-sm font-medium hover:text-primary transition-colors"
@@ -120,11 +122,12 @@ export default function FrontPage() {
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-purple-600 via-purple-500 to-purple-400">
           <div className="absolute inset-0 bg-black opacity-40"></div>
           <div className="relative z-10 text-center px-4">
-            <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 animate-fade-in-up">
-              Ecommece media agency provider !
+            <h1 className="text-3xl md:text-6xl font-extrabold text-white mb-6 animate-fade-in-up">
+              Grow Your Brand with Smart Digital Marketing
             </h1>
             <p className="text-xl md:text-2xl text-white mb-8 animate-fade-in-up animation-delay-300">
-              Innovative strategies. Measurable results. Unparalleled growth.
+              We help brands stand out online with creative content and smart
+              strategies that get results.
             </p>
             <Button
               size="lg"
@@ -137,6 +140,10 @@ export default function FrontPage() {
           <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent"></div>
         </section>
 
+        <section>
+          <About />
+        </section>
+
         <section id="services" className="py-20 bg-gray-50">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
@@ -145,13 +152,13 @@ export default function FrontPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
                 {
-                  title: "Social Media Marketing",
+                  title: "Social Media Marketing/management",
                   description:
                     "Maximize your brand’s visibility on social platforms with tailored strategies that engage audiences and drive real-time interaction.",
                   logo: "/socialmedia.png", // Example logo path
                 },
                 {
-                  title: "Performance Marketing",
+                  title: "Search engine optimization",
                   description:
                     "Achieve measurable success with performance-driven marketing campaigns, designed to deliver ROI through precise targeting and data analysis.",
                   logo: "/performance.png", // Example logo path
@@ -169,13 +176,13 @@ export default function FrontPage() {
                   logo: "/website.png", // Example logo path
                 },
                 {
-                  title: "Social Media Advertising",
+                  title: "YouTube Monetisation",
                   description:
                     "Boost your online presence with strategic social media ads that target the right audience, driving clicks and conversions like never before.",
                   logo: "/advertising.png", // Example logo path
                 },
                 {
-                  title: "Google Ads",
+                  title: "Press Release",
                   description:
                     "Dominate search engines and increase visibility with expertly managed Google Ads campaigns designed to bring in qualified traffic and leads.",
                   logo: "/googleads.png", // Example logo path
@@ -204,6 +211,10 @@ export default function FrontPage() {
               ))}
             </div>
           </div>
+        </section>
+
+        <section className="flex flex-col items-center justify-center mx-auto px-4">
+          <WhyChooseUs />
         </section>
 
         <section id="portfolio" className="py-20">
@@ -324,7 +335,7 @@ export default function FrontPage() {
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="text-2xl font-bold mb-4 md:mb-0">
-              <Image src={"/twelve.jpg"} alt="Twelve" height={60} width={60} />
+              <Image src={"/logo.png"} alt="Twelve" height={80} width={80} />
             </div>
             <nav className="flex space-x-4 mb-4 md:mb-0">
               <a href="#" className="hover:text-emerald-400 transition-colors">
@@ -335,7 +346,7 @@ export default function FrontPage() {
               </a>
             </nav>
             <div className="text-sm text-gray-400">
-              © 2024 DigiBoost. All rights reserved.
+              © 2024 12otwelve. All rights reserved.
             </div>
           </div>
         </div>
