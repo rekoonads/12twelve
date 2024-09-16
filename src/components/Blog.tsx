@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Blog() {
   const blogPosts = [
@@ -28,6 +30,8 @@ export default function Blog() {
     },
   ];
 
+  const router = useRouter();
+
   return (
     <section className="bg-purple-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -50,9 +54,11 @@ export default function Blog() {
                   {post.title}
                 </h3>
                 <p className="text-purple-700 mb-4">{post.excerpt}</p>
-                <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white">
-                  Read More
-                </Button>
+                <Link href={"/blog"}>
+                  <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white">
+                    Read More
+                  </Button>
+                </Link>
               </div>
             </div>
           ))}

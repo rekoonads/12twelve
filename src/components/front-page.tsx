@@ -17,6 +17,7 @@ import Image from "next/image";
 import About from "./About";
 import WhyChooseUs from "./WhyChooseUs";
 import Blog from "./Blog";
+import { useRouter } from "next/navigation";
 
 export default function FrontPage() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -29,6 +30,8 @@ export default function FrontPage() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const router = useRouter();
 
   const testimonials = [
     {
@@ -91,7 +94,7 @@ export default function FrontPage() {
           isScrolled ? "bg-purple-600 shadow-xl" : "bg-transparent"
         }`}
       >
-        <div className="container mx-auto p-2 flex items-center justify-between">
+        <div className="container mx-auto flex items-center justify-between">
           <a href="#" className="text-2xl font-bold text-primary">
             <Image src={"/logo.png"} alt="Twelve" width={120} height={120} />
           </a>
@@ -390,6 +393,15 @@ export default function FrontPage() {
               >
                 <Youtube />
               </a>
+            </div>
+            <div className="flex flex-col text-center md:text-left mb-4 md:mb-0">
+              <a
+                href="tel:+917836001200"
+                className="text-sm text-gray-400 hover:text-emerald-400 transition-colors"
+              >
+                +917836001200
+              </a>
+              <p className="text-sm text-gray-400">Delhi India 110055</p>
             </div>
             <div className="text-sm text-gray-400">
               © 2024 12twelve. All rights reserved.
