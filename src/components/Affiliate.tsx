@@ -60,15 +60,13 @@ export default function Affiliate() {
       }
 
       // Step 2: Fetch the affiliate URL using the generated value
-      const affiliateResponse = await fetch(
-        `https://backend-ndv7.onrender.com/affiliate?val=${affiliate}`
-      );
-      if (!affiliateResponse.ok) {
-        throw new Error("Failed to fetch affiliate URL");
-      }
+      const data = await response.json();
+      console.log(data.savedAffiliate.generatedVal); // Inspect the response data
 
-      const data = await affiliateResponse.json();
-      setAffiliateUrl(data.redirectLink); // Update to use redirectLink from the response
+      // Assuming the backend responds with an object containing the affiliate URL
+      setAffiliateUrl(
+        `https://backend-ndv7.onrender.com/affiliate?val=${data.savedAffiliate.generatedVal}`
+      ); // Update this based on your actual response format
     } catch (error) {
       console.error(error);
       alert("Error generating affiliate link");
@@ -78,9 +76,21 @@ export default function Affiliate() {
   };
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(affiliateUrl);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    console.log("Attempting to copy URL:", affiliateUrl); // Log the URL to verify
+    if (navigator.clipboard) {
+      navigator.clipboard
+        .writeText(affiliateUrl)
+        .then(() => {
+          setCopied(true);
+          console.log("Text copied to clipboard!");
+          setTimeout(() => setCopied(false), 2000);
+        })
+        .catch((error) => {
+          console.error("Failed to copy text:", error);
+        });
+    } else {
+      console.error("Clipboard API not supported");
+    }
   };
 
   return (
@@ -197,12 +207,12 @@ export default function Affiliate() {
               <div className="mt-4 text-center">
                 <p className="text-gray-300">Original URL:</p>
                 <a
-                  href={affiliateUrl}
+                  href={originalUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-purple-400 hover:text-purple-300 break-all"
                 >
-                  {affiliateUrl}
+                  {originalUrl}
                 </a>
               </div>
             )}
