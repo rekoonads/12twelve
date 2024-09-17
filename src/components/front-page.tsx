@@ -353,7 +353,10 @@ export default function FrontPage() {
               <Image src={"/logo.png"} alt="Twelve" height={120} width={120} />
             </div>
             <nav className="flex space-x-4 mb-4 md:mb-0">
-              <a href="#" className="hover:text-emerald-400 transition-colors">
+              <a
+                href="/privacy-policy"
+                className="hover:text-emerald-400 transition-colors"
+              >
                 Privacy Policy
               </a>
               <a href="#" className="hover:text-emerald-400 transition-colors">
