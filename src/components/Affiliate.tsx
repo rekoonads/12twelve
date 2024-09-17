@@ -19,6 +19,7 @@ export default function Affiliate() {
   const [affiliateUrl, setAffiliateUrl] = useState("");
   const [copied, setCopied] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [affiliateVal, setAffiliateVal] = useState("");
 
   function generateUniqueString(length = 5) {
     const characters =
@@ -34,13 +35,46 @@ export default function Affiliate() {
   const generateAffiliateUrl = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsGenerating(true);
-    const affiliateValue = generateUniqueString();
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    const newAffiliateUrl = `https://affiliate.example.com/${btoa(
-      originalUrl
-    )}`;
-    setAffiliateUrl(newAffiliateUrl);
-    setIsGenerating(false);
+
+    const affiliate = generateUniqueString();
+    setAffiliateVal(affiliate);
+
+    try {
+      // Step 1: Generate the affiliate link on the backend
+      const response = await fetch(
+        "https://backend-ndv7.onrender.com/add-affiliate",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            redirectLink: originalUrl,
+            generatedVal: affiliate,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to generate affiliate link");
+      }
+
+      // Step 2: Fetch the affiliate URL using the generated value
+      const affiliateResponse = await fetch(
+        `https://backend-ndv7.onrender.com/affiliate?val=${affiliate}`
+      );
+      if (!affiliateResponse.ok) {
+        throw new Error("Failed to fetch affiliate URL");
+      }
+
+      const data = await affiliateResponse.json();
+      setAffiliateUrl(data.redirectLink); // Update to use redirectLink from the response
+    } catch (error) {
+      console.error(error);
+      alert("Error generating affiliate link");
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const copyToClipboard = () => {
@@ -140,7 +174,7 @@ export default function Affiliate() {
                 <div className="relative">
                   <Input
                     id="affiliate-url"
-                    value={affiliateUrl}
+                    value={`https://backend-ndv7.onrender.com/affiliate?val=${affiliateVal}`}
                     readOnly
                     className="pr-20 bg-gray-800 border-gray-600 text-white focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50"
                   />
@@ -156,6 +190,20 @@ export default function Affiliate() {
                     <span className="ml-1">{copied ? "Copied!" : "Copy"}</span>
                   </Button>
                 </div>
+              </div>
+            )}
+
+            {affiliateUrl && (
+              <div className="mt-4 text-center">
+                <p className="text-gray-300">Original URL:</p>
+                <a
+                  href={affiliateUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-purple-400 hover:text-purple-300 break-all"
+                >
+                  {affiliateUrl}
+                </a>
               </div>
             )}
           </div>
@@ -186,7 +234,7 @@ export default function Affiliate() {
                 Testimonial
               </h2>
               <blockquote className="italic text-gray-300">
-                &quot;Nexus transformed my affiliate strategy. My earnings
+                &quot;12twelve transformed my affiliate strategy. My earnings
                 skyrocketed within weeks!&quot;
               </blockquote>
               <p className="text-right mt-2 text-gray-400">
