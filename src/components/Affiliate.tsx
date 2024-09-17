@@ -202,20 +202,6 @@ export default function Affiliate() {
                 </div>
               </div>
             )}
-
-            {affiliateUrl && (
-              <div className="mt-4 text-center">
-                <p className="text-gray-300">Original URL:</p>
-                <a
-                  href={originalUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-purple-400 hover:text-purple-300 break-all"
-                >
-                  {originalUrl}
-                </a>
-              </div>
-            )}
           </div>
 
           <div className="space-y-8">

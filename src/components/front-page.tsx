@@ -100,6 +100,12 @@ export default function FrontPage() {
           </a>
           <nav className="hidden md:flex space-x-8 text-white">
             <a
+              href="/affiliate"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
+              Affiliate
+            </a>
+            <a
               href="#services"
               className="text-sm font-medium hover:text-primary transition-colors"
             >
