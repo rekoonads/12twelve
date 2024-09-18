@@ -18,10 +18,13 @@ import About from "./About";
 import WhyChooseUs from "./WhyChooseUs";
 import Blog from "./Blog";
 import { useRouter } from "next/navigation";
+import { useAuth, UserButton } from "@clerk/nextjs";
 
 export default function FrontPage() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+
+  const { userId } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -89,53 +92,113 @@ export default function FrontPage() {
 
   return (
     <div className="flex flex-col min-h-[100dvh]">
-      <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${
-          isScrolled ? "bg-purple-600 shadow-xl" : "bg-transparent"
-        }`}
-      >
-        <div className="container mx-auto flex items-center justify-between">
-          <a href="#" className="text-2xl font-bold text-primary">
-            <Image src={"/logo.png"} alt="Twelve" width={120} height={120} />
-          </a>
-          <nav className="hidden md:flex space-x-8 text-white">
-            <a
-              href="/affiliate"
-              className="text-sm font-medium hover:text-primary transition-colors"
-            >
-              Affiliate
+      {!userId && (
+        <header
+          className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${
+            isScrolled ? "bg-purple-600 shadow-xl" : "bg-transparent"
+          }`}
+        >
+          <div className="container mx-auto flex items-center justify-between">
+            <a href="#" className="text-2xl font-bold text-primary">
+              <Image src={"/logo.png"} alt="Twelve" width={120} height={120} />
             </a>
-            <a
-              href="#services"
-              className="text-sm font-medium hover:text-primary transition-colors"
-            >
-              Services
+            <nav className="hidden md:flex space-x-8 text-white">
+              <a
+                href="/affiliate"
+                className="text-sm font-medium hover:text-primary transition-colors"
+              >
+                Affiliate
+              </a>
+              <a
+                href="#services"
+                className="text-sm font-medium hover:text-primary transition-colors"
+              >
+                Services
+              </a>
+              <a
+                href="#portfolio"
+                className="text-sm font-medium hover:text-primary transition-colors"
+              >
+                Portfolio
+              </a>
+              <a
+                href="#blog"
+                className="text-sm font-medium hover:text-primary transition-colors"
+              >
+                Blog
+              </a>
+              <a
+                href="#contact"
+                className="text-sm font-medium hover:text-primary transition-colors"
+              >
+                Contact
+              </a>
+              <a
+                href="/sign-in"
+                className="text-sm font-medium hover:text-primary transition-colors"
+              >
+                Sign In
+              </a>
+            </nav>
+            <Button variant="outline" size="icon" className="md:hidden">
+              <Menu className="h-6 w-6" />
+              <span className="sr-only">Toggle menu</span>
+            </Button>
+          </div>
+        </header>
+      )}
+      {userId && (
+        <header
+          className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${
+            isScrolled ? "bg-purple-600 shadow-xl" : "bg-transparent"
+          }`}
+        >
+          <div className="container mx-auto flex items-center justify-between">
+            <a href="#" className="text-2xl font-bold text-primary">
+              <Image src={"/logo.png"} alt="Twelve" width={120} height={120} />
             </a>
-            <a
-              href="#portfolio"
-              className="text-sm font-medium hover:text-primary transition-colors"
-            >
-              Portfolio
-            </a>
-            <a
-              href="#blog"
-              className="text-sm font-medium hover:text-primary transition-colors"
-            >
-              Blog
-            </a>
-            <a
-              href="#contact"
-              className="text-sm font-medium hover:text-primary transition-colors"
-            >
-              Contact
-            </a>
-          </nav>
-          <Button variant="outline" size="icon" className="md:hidden">
-            <Menu className="h-6 w-6" />
-            <span className="sr-only">Toggle menu</span>
-          </Button>
-        </div>
-      </header>
+            <nav className="hidden md:flex space-x-8 text-white">
+              <a
+                href="/affiliate"
+                className="text-sm font-medium hover:text-primary transition-colors"
+              >
+                Affiliate
+              </a>
+              <a
+                href="#services"
+                className="text-sm font-medium hover:text-primary transition-colors"
+              >
+                Services
+              </a>
+              <a
+                href="#portfolio"
+                className="text-sm font-medium hover:text-primary transition-colors"
+              >
+                Portfolio
+              </a>
+              <a
+                href="#blog"
+                className="text-sm font-medium hover:text-primary transition-colors"
+              >
+                Blog
+              </a>
+              <a
+                href="#contact"
+                className="text-sm font-medium hover:text-primary transition-colors"
+              >
+                Contact
+              </a>
+              <div className="text-sm font-medium hover:text-primary transition-colors">
+                <UserButton />
+              </div>
+            </nav>
+            <Button variant="outline" size="icon" className="md:hidden">
+              <Menu className="h-6 w-6" />
+              <span className="sr-only">Toggle menu</span>
+            </Button>
+          </div>
+        </header>
+      )}
       <main className="flex-1">
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-purple-600 via-purple-500 to-purple-400">
           <div className="absolute inset-0 bg-black opacity-40"></div>
