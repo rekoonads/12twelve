@@ -165,6 +165,12 @@ export default function FrontPage() {
             </a>
             <nav className="hidden md:flex space-x-8 text-white">
               <a
+                href="https://www.getsweven.com/view-advertisement"
+                className="text-sm font-medium hover:text-primary transition-colors"
+              >
+                Offers
+              </a>
+              <a
                 href="/affiliate"
                 className="text-sm font-medium hover:text-primary transition-colors"
               >
