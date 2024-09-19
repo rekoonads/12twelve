@@ -104,7 +104,7 @@ export default function FrontPage() {
             </a>
             <nav className="hidden md:flex space-x-8 text-white">
               <a
-                href="https://www.getsweven.com/view-advertisement"
+                href="/offers"
                 className="text-sm font-medium hover:text-primary transition-colors"
               >
                 Offers
@@ -165,7 +165,7 @@ export default function FrontPage() {
             </a>
             <nav className="hidden md:flex space-x-8 text-white">
               <a
-                href="https://www.getsweven.com/view-advertisement"
+                href="/offers"
                 className="text-sm font-medium hover:text-primary transition-colors"
               >
                 Offers
