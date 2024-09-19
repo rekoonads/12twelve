@@ -42,7 +42,7 @@ export default function Affiliate() {
     try {
       // Step 1: Generate the affiliate link on the backend
       const response = await fetch(
-        "https://backend-ndv7.onrender.com/add-affiliate",
+        "https://one2twelvebackend.onrender.com/add-affiliate",
         {
           method: "POST",
           headers: {
@@ -65,7 +65,7 @@ export default function Affiliate() {
 
       // Assuming the backend responds with an object containing the affiliate URL
       setAffiliateUrl(
-        `https://backend-ndv7.onrender.com/affiliate?val=${data.savedAffiliate.generatedVal}`
+        `https://one2twelvebackend.onrender.com/affiliate?val=${data.savedAffiliate.generatedVal}`
       ); // Update this based on your actual response format
     } catch (error) {
       console.error(error);
@@ -184,7 +184,7 @@ export default function Affiliate() {
                 <div className="relative">
                   <Input
                     id="affiliate-url"
-                    value={`https://backend-ndv7.onrender.com/affiliate?val=${affiliateVal}`}
+                    value={`https://one2twelvebackend.onrender.com/affiliate?val=${affiliateVal}`}
                     readOnly
                     className="pr-20 bg-gray-800 border-gray-600 text-white focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50"
                   />
