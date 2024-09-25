@@ -483,7 +483,7 @@ export default function FrontPage() {
                 href="tel:+917836001200"
                 className="text-sm text-gray-400 hover:text-emerald-400 transition-colors"
               >
-                +917836001200
+                821-9084940
               </a>
               <p className="text-sm text-gray-400">Delhi India 110055</p>
             </div>
