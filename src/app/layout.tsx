@@ -20,6 +20,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <Head>
+          {/* Google Tag (gtag.js) */}
           <script
             async
             src="https://www.googletagmanager.com/gtag/js?id=AW-16709628315"
@@ -37,6 +38,17 @@ export default function RootLayout({
         </Head>
         <body className={inter.className}>
           <div>{children}</div>
+          {/* Optional: Add gtag script before closing body tag */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'AW-16709628315');
+              `,
+            }}
+          />
         </body>
       </html>
     </ClerkProvider>
