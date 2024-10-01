@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuth } from '@clerk/nextjs'
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,11 +16,13 @@ import {
 } from "lucide-react";
 
 export default function Affiliate() {
+  const { userId } = useAuth()
   const [originalUrl, setOriginalUrl] = useState("");
   const [affiliateUrl, setAffiliateUrl] = useState("");
   const [copied, setCopied] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [affiliateVal, setAffiliateVal] = useState("");
+  console.log("userid is : - ",userId)
 
   function generateUniqueString(length = 5) {
     const characters =
@@ -51,6 +54,7 @@ export default function Affiliate() {
           body: JSON.stringify({
             redirectLink: originalUrl,
             generatedVal: affiliate,
+            userId
           }),
         }
       );
