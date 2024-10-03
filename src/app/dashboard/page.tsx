@@ -34,7 +34,10 @@ import {
   UserIcon,
   GlobeIcon,
   PieChartIcon,
+  ShoppingBagIcon,
+  LogOut,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface Website {
   name: string;
@@ -60,6 +63,13 @@ interface ProfitDistribution {
   value: number;
 }
 
+interface Brand {
+  id: number;
+  name: string;
+  logo: string;
+  category: string;
+}
+
 interface MockData {
   totalLinks: number;
   totalUsers: number;
@@ -71,6 +81,7 @@ interface MockData {
   influencerProfits: InfluencerProfit[];
   influencers: Influencer[];
   profitDistribution: ProfitDistribution[];
+  partneredBrands: Brand[];
 }
 
 const mockData: MockData = {
@@ -164,6 +175,44 @@ const mockData: MockData = {
     { name: "User Profits", value: 55200 },
     { name: "Website Commissions", value: 32450 },
   ],
+  partneredBrands: [
+    {
+      id: 1,
+      name: "TechGadget",
+      logo: "/placeholder.svg?height=64&width=64",
+      category: "Electronics",
+    },
+    {
+      id: 2,
+      name: "FashionHub",
+      logo: "/placeholder.svg?height=64&width=64",
+      category: "Apparel",
+    },
+    {
+      id: 3,
+      name: "GourmetDelight",
+      logo: "/placeholder.svg?height=64&width=64",
+      category: "Food & Beverage",
+    },
+    {
+      id: 4,
+      name: "FitLife",
+      logo: "/placeholder.svg?height=64&width=64",
+      category: "Fitness",
+    },
+    {
+      id: 5,
+      name: "BeautyBliss",
+      logo: "/placeholder.svg?height=64&width=64",
+      category: "Cosmetics",
+    },
+    {
+      id: 6,
+      name: "HomeHaven",
+      logo: "/placeholder.svg?height=64&width=64",
+      category: "Home Decor",
+    },
+  ],
 };
 
 const COLORS = ["#8b5cf6", "#10b981"];
@@ -175,6 +224,11 @@ export default function Dashboard() {
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  const handleLogout = () => {
+    // Implement logout logic here
+    console.log("Logging out...");
+  };
 
   if (!isClient) {
     return null; // or return a loading spinner
@@ -188,14 +242,23 @@ export default function Dashboard() {
       className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-purple-900 p-8"
     >
       <div className="max-w-7xl mx-auto">
-        <motion.h1
-          initial={{ y: -50 }}
-          animate={{ y: 0 }}
-          transition={{ type: "spring", stiffness: 100 }}
-          className="text-4xl font-bold text-white mb-8"
-        >
-          Dashboard
-        </motion.h1>
+        <div className="flex justify-between items-center mb-8">
+          <motion.h1
+            initial={{ y: -50 }}
+            animate={{ y: 0 }}
+            transition={{ type: "spring", stiffness: 100 }}
+            className="text-4xl font-bold text-white"
+          >
+            Dashboard
+          </motion.h1>
+          <Button
+            variant="outline"
+            onClick={handleLogout}
+            className="bg-white/10 hover:bg-white/20 text-white"
+          >
+            <LogOut className="mr-2 h-4 w-4" /> Logout
+          </Button>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-8">
           {[
             {
@@ -392,7 +455,6 @@ export default function Dashboard() {
                     backgroundColor: "#1e1e1e",
                     border: "none",
                     borderRadius: "8px",
-                    color: "#ffffff",
                   }}
                   labelStyle={{ color: "#ffffff" }}
                 />
@@ -465,6 +527,28 @@ export default function Dashboard() {
             </div>
           </AnimatedCard>
         </div>
+        <AnimatedCard title="Partnered Brands">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {mockData.partneredBrands.map((brand, index) => (
+              <motion.div
+                key={brand.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="flex flex-col items-center p-4 bg-white/5 rounded-lg"
+              >
+                <Avatar className="h-16 w-16 mb-2">
+                  <AvatarImage src={brand.logo} alt={brand.name} />
+                  <AvatarFallback>{brand.name.slice(0, 2)}</AvatarFallback>
+                </Avatar>
+                <h3 className="text-white font-semibold text-sm text-center">
+                  {brand.name}
+                </h3>
+                <p className="text-white/60 text-xs mt-1">{brand.category}</p>
+              </motion.div>
+            ))}
+          </div>
+        </AnimatedCard>
       </div>
     </motion.div>
   );

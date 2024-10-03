@@ -27,11 +27,30 @@ import {
   Instagram,
   Twitter,
   Youtube,
+  LogOut,
+  Edit,
+  Mail,
+  Phone,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Separator } from "@/components/ui/separator";
 
 interface InfluencerData {
   name: string;
   username: string;
+  email: string;
+  phone: string;
   bio: string;
   followers: {
     instagram: number;
@@ -52,11 +71,14 @@ interface BrandData {
   name: string;
   logo: string;
   engagement: number;
+  products: { name: string; link: string; clickPercentage: number }[];
 }
 
 const mockInfluencerData: InfluencerData = {
   name: "Alex Johnson",
   username: "@alexjohnson",
+  email: "alex@example.com",
+  phone: "+1 (555) 123-4567",
   bio: "Lifestyle & Tech Influencer | Sharing daily inspirations and gadget reviews",
   followers: {
     instagram: 500000,
@@ -98,21 +120,89 @@ const mockBrands: BrandData[] = [
     name: "TechGiant",
     logo: "/placeholder.svg?height=40&width=40",
     engagement: 85,
+    products: [
+      {
+        name: "Smartphone X",
+        link: "https://techgiant.com/smartphone-x",
+        clickPercentage: 12.5,
+      },
+      {
+        name: "Laptop Pro",
+        link: "https://techgiant.com/laptop-pro",
+        clickPercentage: 8.7,
+      },
+      {
+        name: "Smart Watch 3",
+        link: "https://techgiant.com/smart-watch-3",
+        clickPercentage: 15.2,
+      },
+    ],
   },
   {
     name: "FashionNova",
     logo: "/placeholder.svg?height=40&width=40",
     engagement: 92,
+    products: [
+      {
+        name: "Summer Dress",
+        link: "https://fashionnova.com/summer-dress",
+        clickPercentage: 18.3,
+      },
+      {
+        name: "Denim Jacket",
+        link: "https://fashionnova.com/denim-jacket",
+        clickPercentage: 14.1,
+      },
+      {
+        name: "Sneakers",
+        link: "https://fashionnova.com/sneakers",
+        clickPercentage: 20.5,
+      },
+    ],
   },
   {
     name: "GreenEats",
     logo: "/placeholder.svg?height=40&width=40",
     engagement: 78,
+    products: [
+      {
+        name: "Organic Smoothie",
+        link: "https://greeneats.com/organic-smoothie",
+        clickPercentage: 9.8,
+      },
+      {
+        name: "Vegan Burger",
+        link: "https://greeneats.com/vegan-burger",
+        clickPercentage: 11.2,
+      },
+      {
+        name: "Kale Chips",
+        link: "https://greeneats.com/kale-chips",
+        clickPercentage: 7.6,
+      },
+    ],
   },
   {
     name: "FitLife",
     logo: "/placeholder.svg?height=40&width=40",
     engagement: 88,
+    products: [
+      {
+        name: "Yoga Mat",
+        link: "https://fitlife.com/yoga-mat",
+        clickPercentage: 16.7,
+      },
+      {
+        name: "Protein Powder",
+        link: "https://fitlife.com/protein-powder",
+        clickPercentage: 13.9,
+      },
+      {
+        name: "Fitness Tracker",
+        link: "https://fitlife.com/fitness-tracker",
+        clickPercentage: 22.1,
+      },
+    ],
   },
 ];
 
@@ -128,12 +218,26 @@ export default function InfluencerDashboard() {
   const [activeTab, setActiveTab] = useState<"earnings" | "engagement">(
     "earnings"
   );
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editedData, setEditedData] = useState(mockInfluencerData);
 
   useEffect(() => {
     setIsClient(true);
     const timer = setTimeout(() => setIsLoaded(true), 500);
     return () => clearTimeout(timer);
   }, []);
+
+  const handleLogout = () => {
+    // Implement logout logic here
+    console.log("Logging out...");
+  };
+
+  const handleEditSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Update the mockInfluencerData with the edited data
+    Object.assign(mockInfluencerData, editedData);
+    setIsEditModalOpen(false);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-700 to-indigo-800 p-8 text-white">
@@ -143,23 +247,22 @@ export default function InfluencerDashboard() {
         transition={{ duration: 0.5 }}
         className="max-w-7xl mx-auto"
       >
-        <header className="text-center mb-12">
+        <header className="flex justify-between items-center mb-12">
           <motion.h1
-            className="text-6xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-200 to-pink-200"
+            className="text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-200 to-pink-200"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             Influencer Dashboard
           </motion.h1>
-          <motion.p
-            className="text-xl text-purple-200"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+          <Button
+            variant="outline"
+            onClick={handleLogout}
+            className="bg-white/10 hover:bg-white/20 text-white"
           >
-            Your performance at a glance
-          </motion.p>
+            <LogOut className="mr-2 h-4 w-4" /> Logout
+          </Button>
         </header>
 
         <motion.div
@@ -184,11 +287,30 @@ export default function InfluencerDashboard() {
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 text-center md:text-left">
-                  <h2 className="text-3xl font-bold text-purple-100 mb-2">
-                    {mockInfluencerData.name}
-                  </h2>
+                  <div className="flex items-center justify-center md:justify-start mb-2">
+                    <h2 className="text-3xl font-bold text-purple-100 mr-2">
+                      {mockInfluencerData.name}
+                    </h2>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => setIsEditModalOpen(true)}
+                      className="text-purple-300 hover:text-purple-100 hover:bg-purple-800/50"
+                    >
+                      <Edit className="h-4 w-4" />
+                      <span className="sr-only">Edit profile</span>
+                    </Button>
+                  </div>
                   <p className="text-xl text-purple-200 mb-2">
                     {mockInfluencerData.username}
+                  </p>
+                  <p className="text-sm text-purple-300 mb-2 flex items-center justify-center md:justify-start">
+                    <Mail className="w-4 h-4 mr-2" />
+                    {mockInfluencerData.email}
+                  </p>
+                  <p className="text-sm text-purple-300 mb-4 flex items-center justify-center md:justify-start">
+                    <Phone className="w-4 h-4 mr-2" />
+                    {mockInfluencerData.phone}
                   </p>
                   <p className="text-sm text-purple-300 mb-4">
                     {mockInfluencerData.bio}
@@ -259,131 +381,130 @@ export default function InfluencerDashboard() {
           />
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 20 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-          >
-            <Card className="bg-white/10 backdrop-blur-md border-purple-300/20 shadow-lg overflow-hidden">
-              <CardHeader>
-                <CardTitle className="text-2xl font-bold text-purple-100">
-                  Performance Overview
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex space-x-4 mb-4">
-                  <TabButton
-                    active={activeTab === "earnings"}
-                    onClick={() => setActiveTab("earnings")}
-                  >
-                    Earnings
-                  </TabButton>
-                  <TabButton
-                    active={activeTab === "engagement"}
-                    onClick={() => setActiveTab("engagement")}
-                  >
-                    Engagement
-                  </TabButton>
-                </div>
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeTab}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {activeTab === "earnings" ? (
-                      <ResponsiveContainer width="100%" height={300}>
-                        <BarChart data={mockEarningsData}>
-                          <XAxis dataKey="month" stroke="#e9d5ff" />
-                          <YAxis stroke="#e9d5ff" />
-                          <Tooltip
-                            contentStyle={{
-                              backgroundColor: "rgba(139, 92, 246, 0.8)",
-                              border: "none",
-                              borderRadius: "4px",
-                            }}
-                            labelStyle={{ color: "#fff" }}
-                          />
-                          <Bar dataKey="amount" fill="url(#colorGradient)" />
-                          <defs>
-                            <linearGradient
-                              id="colorGradient"
-                              x1="0"
-                              y1="0"
-                              x2="0"
-                              y2="1"
-                            >
-                              <stop
-                                offset="5%"
-                                stopColor="#c084fc"
-                                stopOpacity={0.8}
-                              />
-                              <stop
-                                offset="95%"
-                                stopColor="#8b5cf6"
-                                stopOpacity={0.8}
-                              />
-                            </linearGradient>
-                          </defs>
-                        </BarChart>
-                      </ResponsiveContainer>
-                    ) : (
-                      <ResponsiveContainer width="100%" height={300}>
-                        <LineChart data={mockEngagementData}>
-                          <XAxis dataKey="month" stroke="#e9d5ff" />
-                          <YAxis stroke="#e9d5ff" />
-                          <CartesianGrid
-                            stroke="#e9d5ff"
-                            strokeDasharray="5 5"
-                          />
-                          <Tooltip
-                            contentStyle={{
-                              backgroundColor: "rgba(139, 92, 246, 0.8)",
-                              border: "none",
-                              borderRadius: "4px",
-                            }}
-                            labelStyle={{ color: "#fff" }}
-                          />
-                          <Line
-                            type="monotone"
-                            dataKey="rate"
-                            stroke="#c084fc"
-                            strokeWidth={2}
-                            dot={{ fill: "#8b5cf6", strokeWidth: 2 }}
-                          />
-                        </LineChart>
-                      </ResponsiveContainer>
-                    )}
-                  </motion.div>
-                </AnimatePresence>
-              </CardContent>
-            </Card>
-          </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 20 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+          className="mb-8"
+        >
+          <Card className="bg-white/10 backdrop-blur-md border-purple-300/20 shadow-lg overflow-hidden">
+            <CardHeader>
+              <CardTitle className="text-2xl font-bold text-purple-100">
+                Performance Overview
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex space-x-4 mb-4">
+                <TabButton
+                  active={activeTab === "earnings"}
+                  onClick={() => setActiveTab("earnings")}
+                >
+                  Earnings
+                </TabButton>
+                <TabButton
+                  active={activeTab === "engagement"}
+                  onClick={() => setActiveTab("engagement")}
+                >
+                  Engagement
+                </TabButton>
+              </div>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeTab}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {activeTab === "earnings" ? (
+                    <ResponsiveContainer width="100%" height={300}>
+                      <BarChart data={mockEarningsData}>
+                        <XAxis dataKey="month" stroke="#e9d5ff" />
+                        <YAxis stroke="#e9d5ff" />
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: "rgba(139, 92, 246, 0.8)",
+                            border: "none",
+                            borderRadius: "4px",
+                          }}
+                          labelStyle={{ color: "#fff" }}
+                        />
+                        <Bar dataKey="amount" fill="url(#colorGradient)" />
+                        <defs>
+                          <linearGradient
+                            id="colorGradient"
+                            x1="0"
+                            y1="0"
+                            x2="0"
+                            y2="1"
+                          >
+                            <stop
+                              offset="5%"
+                              stopColor="#c084fc"
+                              stopOpacity={0.8}
+                            />
+                            <stop
+                              offset="95%"
+                              stopColor="#8b5cf6"
+                              stopOpacity={0.8}
+                            />
+                          </linearGradient>
+                        </defs>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <ResponsiveContainer width="100%" height={300}>
+                      <LineChart data={mockEngagementData}>
+                        <XAxis dataKey="month" stroke="#e9d5ff" />
+                        <YAxis stroke="#e9d5ff" />
+                        <CartesianGrid stroke="#e9d5ff" strokeDasharray="5 5" />
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: "rgba(139, 92, 246, 0.8)",
+                            border: "none",
+                            borderRadius: "4px",
+                          }}
+                          labelStyle={{ color: "#fff" }}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="rate"
+                          stroke="#c084fc"
+                          strokeWidth={2}
+                          dot={{ fill: "#8b5cf6", strokeWidth: 2 }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            </CardContent>
+          </Card>
+        </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 20 }}
-            transition={{ duration: 0.5, delay: 0.7 }}
-          >
-            <Card className="bg-white/10 backdrop-blur-md border-purple-300/20 shadow-lg">
-              <CardHeader>
-                <CardTitle className="text-2xl font-bold text-purple-100">
-                  Brand Collaborations
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {mockBrands.map((brand, index) => (
-                    <motion.div
-                      key={brand.name}
-                      className="flex items-center justify-between bg-purple-800/50 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: 0.8 + index * 0.1 }}
-                    >
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 20 }}
+          transition={{ duration: 0.5, delay: 0.7 }}
+          className="mb-8"
+        >
+          <Card className="bg-white/10 backdrop-blur-md border-purple-300/20 shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-2xl font-bold text-purple-100">
+                Brand Collaborations
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                {mockBrands.map((brand, index) => (
+                  <motion.div
+                    key={brand.name}
+                    className="bg-purple-800/50 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: 0.8 + index * 0.1 }}
+                  >
+                    <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-4">
                         <Avatar className="border-2 border-purple-300">
                           <AvatarImage src={brand.logo} alt={brand.name} />
@@ -398,13 +519,36 @@ export default function InfluencerDashboard() {
                       <div className="text-sm text-purple-200">
                         Engagement: {brand.engagement}%
                       </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="text-sm font-semibold text-purple-200 mb-2">
+                        Promoted Products:
+                      </h4>
+                      {brand.products.map((product, productIndex) => (
+                        <div
+                          key={productIndex}
+                          className="flex items-center justify-between space-x-2"
+                        >
+                          <Link
+                            href={product.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm text-purple-100 hover:text-purple-200 transition-colors duration-200"
+                          >
+                            {product.name}
+                          </Link>
+                          <div className="text-xs text-purple-300">
+                            {product.clickPercentage.toFixed(1)}% clicks
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -462,6 +606,93 @@ export default function InfluencerDashboard() {
             </CardContent>
           </Card>
         </motion.div>
+
+        <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
+          <DialogContent className="bg-purple-900 text-purple-100">
+            <DialogHeader>
+              <DialogTitle>Edit Profile</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleEditSubmit}>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="name" className="text-right">
+                    Name
+                  </Label>
+                  <Input
+                    id="name"
+                    value={editedData.name}
+                    onChange={(e) =>
+                      setEditedData({ ...editedData, name: e.target.value })
+                    }
+                    className="col-span-3 bg-purple-800 text-purple-100 border-purple-700"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="username" className="text-right">
+                    Username
+                  </Label>
+                  <Input
+                    id="username"
+                    value={editedData.username}
+                    onChange={(e) =>
+                      setEditedData({ ...editedData, username: e.target.value })
+                    }
+                    className="col-span-3 bg-purple-800 text-purple-100 border-purple-700"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="email" className="text-right">
+                    Email
+                  </Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={editedData.email}
+                    onChange={(e) =>
+                      setEditedData({ ...editedData, email: e.target.value })
+                    }
+                    className="col-span-3 bg-purple-800 text-purple-100 border-purple-700"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="phone" className="text-right">
+                    Phone
+                  </Label>
+                  <Input
+                    id="phone"
+                    type="tel"
+                    value={editedData.phone}
+                    onChange={(e) =>
+                      setEditedData({ ...editedData, phone: e.target.value })
+                    }
+                    className="col-span-3 bg-purple-800 text-purple-100 border-purple-700"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="bio" className="text-right">
+                    Bio
+                  </Label>
+                  <Textarea
+                    id="bio"
+                    value={editedData.bio}
+                    onChange={(e) =>
+                      setEditedData({ ...editedData, bio: e.target.value })
+                    }
+                    className="col-span-3 bg-purple-800 text-purple-100 border-purple-700"
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button
+                  type="submit"
+                  className="bg-purple-600 text-purple-100 hover:bg-purple-700"
+                >
+                  Save changes
+                </Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
       </motion.div>
     </div>
   );
