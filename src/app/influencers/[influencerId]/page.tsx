@@ -44,21 +44,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Separator } from "@/components/ui/separator";
-
-interface InfluencerData {
-  name: string;
-  username: string;
-  email: string;
-  phone: string;
-  bio: string;
-  followers: {
-    instagram: number;
-    twitter: number;
-    youtube: number;
-  };
-  profileImage: string;
-}
+import { useUser, useClerk } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import LoadingScreen from "@/components/loading-screen";
 
 interface ChartData {
   month: string;
@@ -73,20 +61,6 @@ interface BrandData {
   engagement: number;
   products: { name: string; link: string; clickPercentage: number }[];
 }
-
-const mockInfluencerData: InfluencerData = {
-  name: "Alex Johnson",
-  username: "@alexjohnson",
-  email: "alex@example.com",
-  phone: "+1 (555) 123-4567",
-  bio: "Lifestyle & Tech Influencer | Sharing daily inspirations and gadget reviews",
-  followers: {
-    instagram: 500000,
-    twitter: 250000,
-    youtube: 750000,
-  },
-  profileImage: "/placeholder.svg?height=200&width=200",
-};
 
 const mockEarningsData: ChartData[] = [
   { month: "Jan", amount: 5000 },
@@ -219,7 +193,9 @@ export default function InfluencerDashboard() {
     "earnings"
   );
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editedData, setEditedData] = useState(mockInfluencerData);
+  const { user, isLoaded: isUserLoaded, isSignedIn } = useUser();
+  const { signOut } = useClerk();
+  const router = useRouter();
 
   useEffect(() => {
     setIsClient(true);
@@ -227,17 +203,28 @@ export default function InfluencerDashboard() {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleLogout = () => {
-    // Implement logout logic here
-    console.log("Logging out...");
+  const handleLogout = async () => {
+    await signOut();
+    router.push("/");
   };
 
   const handleEditSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Update the mockInfluencerData with the edited data
-    Object.assign(mockInfluencerData, editedData);
-    setIsEditModalOpen(false);
+    if (user) {
+      // Implement the logic to update the user data using Clerk
+      console.log("Updating user data:", user);
+      setIsEditModalOpen(false);
+    }
   };
+
+  if (!isUserLoaded) {
+    return <LoadingScreen />;
+  }
+
+  if (!isSignedIn) {
+    router.push("/");
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-700 to-indigo-800 p-8 text-white">
@@ -256,13 +243,15 @@ export default function InfluencerDashboard() {
           >
             Influencer Dashboard
           </motion.h1>
-          <Button
-            variant="outline"
-            onClick={handleLogout}
-            className="bg-white/10 hover:bg-white/20 text-white"
-          >
-            <LogOut className="mr-2 h-4 w-4" /> Logout
-          </Button>
+          {isSignedIn && (
+            <Button
+              variant="outline"
+              onClick={handleLogout}
+              className="bg-white/10 hover:bg-white/20 text-white"
+            >
+              <LogOut className="mr-2 h-4 w-4" /> Logout
+            </Button>
+          )}
         </header>
 
         <motion.div
@@ -276,20 +265,22 @@ export default function InfluencerDashboard() {
               <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
                 <Avatar className="w-24 h-24 border-4 border-purple-300">
                   <AvatarImage
-                    src={mockInfluencerData.profileImage}
-                    alt={mockInfluencerData.name}
+                    src={user?.imageUrl}
+                    alt={user?.fullName || "Influencer"}
                   />
                   <AvatarFallback>
-                    {mockInfluencerData.name
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")}
+                    {user?.fullName
+                      ? user.fullName
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                      : "IN"}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 text-center md:text-left">
                   <div className="flex items-center justify-center md:justify-start mb-2">
                     <h2 className="text-3xl font-bold text-purple-100 mr-2">
-                      {mockInfluencerData.name}
+                      {user?.fullName || "Unnamed Influencer"}
                     </h2>
                     <Button
                       variant="ghost"
@@ -302,25 +293,27 @@ export default function InfluencerDashboard() {
                     </Button>
                   </div>
                   <p className="text-xl text-purple-200 mb-2">
-                    {mockInfluencerData.username}
+                    {user?.username || "No username"}
                   </p>
                   <p className="text-sm text-purple-300 mb-2 flex items-center justify-center md:justify-start">
                     <Mail className="w-4 h-4 mr-2" />
-                    {mockInfluencerData.email}
+                    {user?.primaryEmailAddress?.emailAddress ||
+                      "No email provided"}
                   </p>
                   <p className="text-sm text-purple-300 mb-4 flex items-center justify-center md:justify-start">
                     <Phone className="w-4 h-4 mr-2" />
-                    {mockInfluencerData.phone}
+                    {user?.phoneNumbers[0]?.phoneNumber ||
+                      "No phone number provided"}
                   </p>
                   <p className="text-sm text-purple-300 mb-4">
-                    {mockInfluencerData.bio}
+                    {"No bio available"}
                   </p>
                   <div className="flex flex-wrap justify-center md:justify-start gap-4">
                     <div className="flex items-center">
                       <Instagram className="w-5 h-5 mr-2 text-purple-300" />
                       <span className="text-purple-100">
                         {isClient
-                          ? formatNumber(mockInfluencerData.followers.instagram)
+                          ? formatNumber(500000) // Placeholder value
                           : "---"}{" "}
                         followers
                       </span>
@@ -329,7 +322,7 @@ export default function InfluencerDashboard() {
                       <Twitter className="w-5 h-5 mr-2 text-purple-300" />
                       <span className="text-purple-100">
                         {isClient
-                          ? formatNumber(mockInfluencerData.followers.twitter)
+                          ? formatNumber(250000) // Placeholder value
                           : "---"}{" "}
                         followers
                       </span>
@@ -338,7 +331,7 @@ export default function InfluencerDashboard() {
                       <Youtube className="w-5 h-5 mr-2 text-purple-300" />
                       <span className="text-purple-100">
                         {isClient
-                          ? formatNumber(mockInfluencerData.followers.youtube)
+                          ? formatNumber(750000) // Placeholder value
                           : "---"}{" "}
                         subscribers
                       </span>
@@ -620,10 +613,10 @@ export default function InfluencerDashboard() {
                   </Label>
                   <Input
                     id="name"
-                    value={editedData.name}
-                    onChange={(e) =>
-                      setEditedData({ ...editedData, name: e.target.value })
-                    }
+                    value={user?.fullName || ""}
+                    onChange={(e) => {
+                      // Update user name using Clerk
+                    }}
                     className="col-span-3 bg-purple-800 text-purple-100 border-purple-700"
                   />
                 </div>
@@ -633,10 +626,10 @@ export default function InfluencerDashboard() {
                   </Label>
                   <Input
                     id="username"
-                    value={editedData.username}
-                    onChange={(e) =>
-                      setEditedData({ ...editedData, username: e.target.value })
-                    }
+                    value={user?.username || ""}
+                    onChange={(e) => {
+                      // Update username using Clerk
+                    }}
                     className="col-span-3 bg-purple-800 text-purple-100 border-purple-700"
                   />
                 </div>
@@ -647,10 +640,10 @@ export default function InfluencerDashboard() {
                   <Input
                     id="email"
                     type="email"
-                    value={editedData.email}
-                    onChange={(e) =>
-                      setEditedData({ ...editedData, email: e.target.value })
-                    }
+                    value={user?.primaryEmailAddress?.emailAddress || ""}
+                    onChange={(e) => {
+                      // Update email using Clerk
+                    }}
                     className="col-span-3 bg-purple-800 text-purple-100 border-purple-700"
                   />
                 </div>
@@ -661,23 +654,10 @@ export default function InfluencerDashboard() {
                   <Input
                     id="phone"
                     type="tel"
-                    value={editedData.phone}
-                    onChange={(e) =>
-                      setEditedData({ ...editedData, phone: e.target.value })
-                    }
-                    className="col-span-3 bg-purple-800 text-purple-100 border-purple-700"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="bio" className="text-right">
-                    Bio
-                  </Label>
-                  <Textarea
-                    id="bio"
-                    value={editedData.bio}
-                    onChange={(e) =>
-                      setEditedData({ ...editedData, bio: e.target.value })
-                    }
+                    value={user?.phoneNumbers[0]?.phoneNumber || ""}
+                    onChange={(e) => {
+                      // Update phone number using Clerk
+                    }}
                     className="col-span-3 bg-purple-800 text-purple-100 border-purple-700"
                   />
                 </div>

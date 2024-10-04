@@ -19,12 +19,16 @@ import WhyChooseUs from "./WhyChooseUs";
 import Blog from "./Blog";
 import { useRouter } from "next/navigation";
 import { useAuth, UserButton } from "@clerk/nextjs";
+import { useUserData } from "@/hooks/useUserData";
+import LoadingScreen from "./loading-screen";
 
 export default function FrontPage() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
   const { userId } = useAuth();
+  const { userData, loading, error } = useUserData();
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,7 +38,28 @@ export default function FrontPage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const router = useRouter();
+  useEffect(() => {
+    if (
+      !loading &&
+      userData &&
+      userData.userType === "influencer" &&
+      userData.userId
+    ) {
+      router.push(`/influencers/${userData.userId}`);
+    }
+  }, [loading, userData, router]);
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        Error: {error.message}
+      </div>
+    );
+  }
 
   const testimonials = [
     {
@@ -83,134 +108,76 @@ export default function FrontPage() {
       alt: "YouTube Monetisation",
       title: "YouTube Monetisation",
     },
-    {
-      src: "/project6.jpg",
-      alt: "Press Release",
-      title: "Press Release",
-    },
+    { src: "/project6.jpg", alt: "Press Release", title: "Press Release" },
   ];
 
   return (
     <div className="flex flex-col min-h-[100dvh]">
-      {!userId && (
-        <header
-          className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${
-            isScrolled ? "bg-purple-600 shadow-xl" : "bg-transparent"
-          }`}
-        >
-          <div className="container mx-auto flex items-center justify-between">
-            <a href="#" className="text-2xl font-bold text-primary">
-              <Image src={"/logo.png"} alt="Twelve" width={120} height={120} />
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${
+          isScrolled ? "bg-purple-600 shadow-xl" : "bg-transparent"
+        }`}
+      >
+        <div className="container mx-auto flex items-center justify-between">
+          <a href="#" className="text-2xl font-bold text-primary">
+            <Image src={"/logo.png"} alt="Twelve" width={120} height={120} />
+          </a>
+          <nav className="hidden md:flex space-x-8 text-white">
+            <a
+              href="/offers"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
+              Offers
             </a>
-            <nav className="hidden md:flex space-x-8 text-white">
-              <a
-                href="/offers"
-                className="text-sm font-medium hover:text-primary transition-colors"
-              >
-                Offers
-              </a>
-              <a
-                href="/affiliate"
-                className="text-sm font-medium hover:text-primary transition-colors"
-              >
-                Affiliate
-              </a>
-              <a
-                href="#services"
-                className="text-sm font-medium hover:text-primary transition-colors"
-              >
-                Services
-              </a>
-              <a
-                href="#portfolio"
-                className="text-sm font-medium hover:text-primary transition-colors"
-              >
-                Portfolio
-              </a>
-              <a
-                href="#blog"
-                className="text-sm font-medium hover:text-primary transition-colors"
-              >
-                Blog
-              </a>
-              <a
-                href="#contact"
-                className="text-sm font-medium hover:text-primary transition-colors"
-              >
-                Contact
-              </a>
+            <a
+              href="/affiliate"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
+              Affiliate
+            </a>
+            <a
+              href="#services"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
+              Services
+            </a>
+            <a
+              href="#portfolio"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
+              Portfolio
+            </a>
+            <a
+              href="#blog"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
+              Blog
+            </a>
+            <a
+              href="#contact"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
+              Contact
+            </a>
+            {userId ? (
+              <div className="text-sm font-medium hover:text-primary transition-colors">
+                <UserButton />
+              </div>
+            ) : (
               <a
                 href="/sign-in"
                 className="text-sm font-medium hover:text-primary transition-colors"
               >
                 Sign In
               </a>
-            </nav>
-            <Button variant="outline" size="icon" className="md:hidden">
-              <Menu className="h-6 w-6" />
-              <span className="sr-only">Toggle menu</span>
-            </Button>
-          </div>
-        </header>
-      )}
-      {userId && (
-        <header
-          className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${
-            isScrolled ? "bg-purple-600 shadow-xl" : "bg-transparent"
-          }`}
-        >
-          <div className="container mx-auto flex items-center justify-between">
-            <a href="#" className="text-2xl font-bold text-primary">
-              <Image src={"/logo.png"} alt="Twelve" width={120} height={120} />
-            </a>
-            <nav className="hidden md:flex space-x-8 text-white">
-              <a
-                href="/offers"
-                className="text-sm font-medium hover:text-primary transition-colors"
-              >
-                Offers
-              </a>
-              <a
-                href="/affiliate"
-                className="text-sm font-medium hover:text-primary transition-colors"
-              >
-                Affiliate
-              </a>
-              <a
-                href="#services"
-                className="text-sm font-medium hover:text-primary transition-colors"
-              >
-                Services
-              </a>
-              <a
-                href="#portfolio"
-                className="text-sm font-medium hover:text-primary transition-colors"
-              >
-                Portfolio
-              </a>
-              <a
-                href="#blog"
-                className="text-sm font-medium hover:text-primary transition-colors"
-              >
-                Blog
-              </a>
-              <a
-                href="#contact"
-                className="text-sm font-medium hover:text-primary transition-colors"
-              >
-                Contact
-              </a>
-              <div className="text-sm font-medium hover:text-primary transition-colors">
-                <UserButton />
-              </div>
-            </nav>
-            <Button variant="outline" size="icon" className="md:hidden">
-              <Menu className="h-6 w-6" />
-              <span className="sr-only">Toggle menu</span>
-            </Button>
-          </div>
-        </header>
-      )}
+            )}
+          </nav>
+          <Button variant="outline" size="icon" className="md:hidden">
+            <Menu className="h-6 w-6" />
+            <span className="sr-only">Toggle menu</span>
+          </Button>
+        </div>
+      </header>
       <main className="flex-1">
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-purple-600 via-purple-500 to-purple-400">
           <div className="absolute inset-0 bg-black opacity-40"></div>
@@ -246,38 +213,38 @@ export default function FrontPage() {
                 {
                   title: "Social Media Marketing/management",
                   description:
-                    "Maximize your brand’s visibility on social platforms with tailored strategies that engage audiences and drive real-time interaction.",
-                  logo: "/socialmedia.png", // Example logo path
+                    "Maximize your brand's visibility on social platforms with tailored strategies that engage audiences and drive real-time interaction.",
+                  logo: "/socialmedia.png",
                 },
                 {
                   title: "Search engine optimization",
                   description:
                     "Achieve measurable success with performance-driven marketing campaigns, designed to deliver ROI through precise targeting and data analysis.",
-                  logo: "/seo.png", // Example logo path
+                  logo: "/seo.png",
                 },
                 {
                   title: "Influencer Marketing",
                   description:
-                    "Leverage the power of influencers to amplify your brand’s message and connect authentically with your target audience for maximum reach.",
-                  logo: "/influencer.png", // Example logo path
+                    "Leverage the power of influencers to amplify your brand's message and connect authentically with your target audience for maximum reach.",
+                  logo: "/influencer.png",
                 },
                 {
                   title: "Website Design and Development",
                   description:
-                    "Create a seamless user experience with beautifully designed and highly functional websites that capture your brand’s essence.",
-                  logo: "/website.png", // Example logo path
+                    "Create a seamless user experience with beautifully designed and highly functional websites that capture your brand's essence.",
+                  logo: "/website.png",
                 },
                 {
                   title: "YouTube Monetisation",
                   description:
                     "Boost your online presence with strategic social media ads that target the right audience, driving clicks and conversions like never before.",
-                  logo: "/youtube.png", // Example logo path
+                  logo: "/youtube.png",
                 },
                 {
                   title: "Press Release",
                   description:
                     "Dominate search engines and increase visibility with expertly managed Google Ads campaigns designed to bring in qualified traffic and leads.",
-                  logo: "/press.png", // Example logo path
+                  logo: "/press.png",
                 },
               ].map((service, index) => (
                 <div
@@ -337,48 +304,6 @@ export default function FrontPage() {
             </div>
           </div>
         </section>
-
-        {/* <section id="testimonials" className="py-20 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-              What Our Clients Say
-            </h2>
-            <div className="max-w-3xl mx-auto">
-              <div className="bg-white rounded-lg shadow-lg p-8 relative">
-                <div className="text-4xl text-purple-500 absolute top-4 left-4 opacity-20">
-                  &quot;
-                </div>
-                <p className="text-lg mb-4">
-                  {testimonials[currentTestimonial].content}
-                </p>
-                <div className="flex items-center">
-                  <div className="w-12 h-12 bg-gray-300 rounded-full mr-4"></div>
-                  <div>
-                    <p className="font-semibold">
-                      {testimonials[currentTestimonial].name}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      {testimonials[currentTestimonial].role}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="flex justify-center mt-6 space-x-2">
-                {testimonials.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentTestimonial(index)}
-                    className={`w-3 h-3 rounded-full ${
-                      currentTestimonial === index
-                        ? "bg-purple-500"
-                        : "bg-gray-300"
-                    }`}
-                  ></button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section> */}
 
         <section id="blog">
           <Blog />
