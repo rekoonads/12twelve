@@ -21,6 +21,9 @@ import { useRouter } from "next/navigation";
 import { useAuth, UserButton } from "@clerk/nextjs";
 import { useUserData } from "@/hooks/useUserData";
 import LoadingScreen from "./loading-screen";
+import AnimatedHeroSection from "./Hero";
+import Services from "./Services";
+import AnimatedPurplePortfolio from "./Portfolio";
 
 export default function FrontPage() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -80,35 +83,6 @@ export default function FrontPage() {
       content:
         "Working with this team has been a game-changer for our startup. They truly understand digital marketing.",
     },
-  ];
-
-  const portfolioImages = [
-    {
-      src: "/project1.jpg",
-      alt: "Social Media Marketing/management",
-      title: "Social Media Marketing/management",
-    },
-    {
-      src: "/project2.jpg",
-      alt: "Search engine optimization ",
-      title: "Search engine optimization ",
-    },
-    {
-      src: "/project3.jpg",
-      alt: "Influencer Marketing",
-      title: "Influencer Marketing",
-    },
-    {
-      src: "/project4.jpg",
-      alt: "Website Design and Development",
-      title: "Website Design and Development",
-    },
-    {
-      src: "/project5.jpg",
-      alt: "YouTube Monetisation",
-      title: "YouTube Monetisation",
-    },
-    { src: "/project6.jpg", alt: "Press Release", title: "Press Release" },
   ];
 
   return (
@@ -179,130 +153,18 @@ export default function FrontPage() {
         </div>
       </header>
       <main className="flex-1">
-        <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-purple-600 via-purple-500 to-purple-400">
-          <div className="absolute inset-0 bg-black opacity-40"></div>
-          <div className="relative z-10 text-center px-4">
-            <h1 className="text-3xl md:text-6xl font-extrabold text-white mb-6 animate-fade-in-up">
-              Grow Your Brand with Smart Digital Marketing
-            </h1>
-            <p className="text-xl md:text-2xl text-white mb-8 animate-fade-in-up animation-delay-300">
-              We help brands stand out online with creative content and smart
-              strategies that get results.
-            </p>
-            <Button
-              size="lg"
-              className="animate-fade-in-up animation-delay-600 bg-white text-purple-600 hover:bg-purple-50"
-            >
-              Get Started
-              <ChevronRight className="ml-2 h-4 w-4" />
-            </Button>
-          </div>
-        </section>
+        <AnimatedHeroSection />
 
         <section>
           <About />
         </section>
 
-        <section id="services" className="py-20 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-              Our Services
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                {
-                  title: "Social Media Marketing/management",
-                  description:
-                    "Maximize your brand's visibility on social platforms with tailored strategies that engage audiences and drive real-time interaction.",
-                  logo: "/socialmedia.png",
-                },
-                {
-                  title: "Search engine optimization",
-                  description:
-                    "Achieve measurable success with performance-driven marketing campaigns, designed to deliver ROI through precise targeting and data analysis.",
-                  logo: "/seo.png",
-                },
-                {
-                  title: "Influencer Marketing",
-                  description:
-                    "Leverage the power of influencers to amplify your brand's message and connect authentically with your target audience for maximum reach.",
-                  logo: "/influencer.png",
-                },
-                {
-                  title: "Website Design and Development",
-                  description:
-                    "Create a seamless user experience with beautifully designed and highly functional websites that capture your brand's essence.",
-                  logo: "/website.png",
-                },
-                {
-                  title: "YouTube Monetisation",
-                  description:
-                    "Boost your online presence with strategic social media ads that target the right audience, driving clicks and conversions like never before.",
-                  logo: "/youtube.png",
-                },
-                {
-                  title: "Press Release",
-                  description:
-                    "Dominate search engines and increase visibility with expertly managed Google Ads campaigns designed to bring in qualified traffic and leads.",
-                  logo: "/press.png",
-                },
-              ].map((service, index) => (
-                <div
-                  key={index}
-                  className="bg-white rounded-lg shadow-lg p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-2"
-                >
-                  <div className="flex justify-center mb-4">
-                    <Image
-                      src={service.logo}
-                      alt={`${service.title} Logo`}
-                      width={50}
-                      height={50}
-                      className="mx-auto"
-                    />
-                  </div>
-                  <h3 className="text-xl font-semibold text-center mb-4">
-                    {service.title}
-                  </h3>
-                  <p className="text-gray-600 text-center">
-                    {service.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <Services />
 
-        <section className="flex flex-col items-center justify-center mx-auto px-4">
-          <WhyChooseUs />
-        </section>
+        <WhyChooseUs />
 
-        <section id="portfolio" className="py-20">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-              Our Portfolio
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {portfolioImages.map((image, index) => (
-                <div
-                  key={index}
-                  className="relative group overflow-hidden rounded-lg shadow-lg"
-                >
-                  <Image
-                    src={image.src}
-                    alt={image.alt}
-                    width={400}
-                    height={300}
-                    className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <p className="text-white text-lg font-semibold text-center px-4">
-                      {image.title}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+        <section id="portfolio">
+          <AnimatedPurplePortfolio />
         </section>
 
         <section id="blog">

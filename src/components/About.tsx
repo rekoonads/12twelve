@@ -1,161 +1,152 @@
-import { motion } from "framer-motion";
+"use client";
+
+import {
+  motion,
+  useScroll,
+  useTransform,
+  AnimatePresence,
+} from "framer-motion";
 import { ArrowRight, BarChart, Search, Users, Megaphone } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { useRef, useState } from "react";
 
 export default function About() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"],
+  });
+
+  const opacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
+  const scale = useTransform(scrollYProgress, [0, 0.2], [0.8, 1]);
+
+  const cards = [
+    {
+      title: "Effective Strategies",
+      description:
+        "Develop tailored marketing strategies that drive results and maximize your ROI.",
+      icon: BarChart,
+    },
+    {
+      title: "Targeted Visibility",
+      description:
+        "Increase your online presence and reach your ideal audience across all platforms.",
+      icon: Search,
+    },
+    {
+      title: "Data-Driven Insights",
+      description:
+        "Make informed decisions with our advanced analytics and reporting tools.",
+      icon: Users,
+    },
+    {
+      title: "Amplified Reach",
+      description:
+        "Expand your brand's influence and engage with a wider, more relevant audience.",
+      icon: Megaphone,
+    },
+  ];
+
   return (
-    <section className="bg-gradient-to-br from-purple-50 to-white py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto relative z-10">
+    <section
+      ref={containerRef}
+      className="bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden min-h-screen flex items-center"
+    >
+      <div className="absolute inset-0 bg-[url('/noise.png')] opacity-5 mix-blend-overlay"></div>
+      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
+
+      <motion.div
+        style={{ opacity, scale }}
+        className="max-w-7xl mx-auto relative z-10"
+      >
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16"
         >
-          <h2 className="text-4xl sm:text-5xl font-extrabold text-purple-800 mb-4">
+          <h2 className="text-6xl sm:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-200 to-pink-300 mb-4">
             About 12twelve
           </h2>
-          <div className="w-24 h-1 bg-purple-500 mx-auto"></div>
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: "12rem" }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+            className="h-1 bg-gradient-to-r from-purple-400 to-pink-400 mx-auto"
+          ></motion.div>
+          <p className="mt-6 text-xl text-purple-100 max-w-3xl mx-auto">
+            Empowering businesses with innovative marketing solutions and
+            data-driven strategies for unparalleled growth and success.
+          </p>
         </motion.div>
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3, duration: 0.6 }}
-            className="space-y-8"
-          >
-            <div>
-              <h3 className="text-2xl font-semibold text-purple-700 mb-4">
-                Effective Strategies
-              </h3>
-              <p className="text-gray-600 mb-4">
-                At 12twelve, we help you to develop effective marketing
-                strategies tailored to your unique business needs and goals. Our
-                expertise ensures that your marketing efforts are focused and
-                impactful.
-              </p>
-              <a
-                href="#learn-more"
-                className="inline-flex items-center text-purple-600 hover:text-purple-800 transition-colors duration-300"
-              >
-                Learn more <ArrowRight className="ml-2 h-4 w-4" />
-              </a>
-            </div>
-            <div>
-              <h3 className="text-2xl font-semibold text-purple-700 mb-4">
-                Targeted Visibility
-              </h3>
-              <p className="text-gray-600 mb-4">
-                We understand how to get the proper individuals to see your
-                business on social media and through search engines. Our
-                targeted approach ensures your message reaches the right
-                audience at the right time.
-              </p>
-              <a
-                href="#discover-how"
-                className="inline-flex items-center text-purple-600 hover:text-purple-800 transition-colors duration-300"
-              >
-                Discover how <ArrowRight className="ml-2 h-4 w-4" />
-              </a>
-            </div>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.5, duration: 0.6 }}
-            className="relative"
-          >
-            <svg
-              className="w-full h-auto"
-              viewBox="0 0 400 400"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {cards.map((card, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              onHoverStart={() => setHoveredCard(index)}
+              onHoverEnd={() => setHoveredCard(null)}
             >
-              <circle
-                cx="200"
-                cy="200"
-                r="200"
-                fill="url(#gradient)"
-                fillOpacity="0.1"
-              />
-              <circle
-                cx="200"
-                cy="200"
-                r="150"
-                stroke="#8B5CF6"
-                strokeWidth="4"
-                strokeDasharray="20 20"
-              />
-              <motion.circle
-                cx="200"
-                cy="50"
-                r="40"
-                fill="#8B5CF6"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 1, duration: 0.5 }}
-              />
-              <motion.circle
-                cx="330"
-                cy="200"
-                r="40"
-                fill="#8B5CF6"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 1.2, duration: 0.5 }}
-              />
-              <motion.circle
-                cx="70"
-                cy="200"
-                r="40"
-                fill="#8B5CF6"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 1.4, duration: 0.5 }}
-              />
-              <motion.circle
-                cx="200"
-                cy="350"
-                r="40"
-                fill="#8B5CF6"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 1.6, duration: 0.5 }}
-              />
-              <motion.g
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 2, duration: 0.5 }}
-              >
-                <foreignObject x="180" y="30" width="40" height="40">
-                  <BarChart className="w-10 h-10 text-white" />
-                </foreignObject>
-                <foreignObject x="310" y="180" width="40" height="40">
-                  <Search className="w-10 h-10 text-white" />
-                </foreignObject>
-                <foreignObject x="50" y="180" width="40" height="40">
-                  <Users className="w-10 h-10 text-white" />
-                </foreignObject>
-                <foreignObject x="180" y="330" width="40" height="40">
-                  <Megaphone className="w-10 h-10 text-white" />
-                </foreignObject>
-              </motion.g>
-            </svg>
-            <defs>
-              <radialGradient
-                id="gradient"
-                cx="0"
-                cy="0"
-                r="1"
-                gradientUnits="userSpaceOnUse"
-                gradientTransform="translate(200 200) rotate(90) scale(200)"
-              >
-                <stop stopColor="#8B5CF6" />
-                <stop offset="1" stopColor="#8B5CF6" stopOpacity="0" />
-              </radialGradient>
-            </defs>
-          </motion.div>
+              <Card className="bg-white/10 backdrop-blur-md border-purple-300/20 hover:border-purple-300/40 transition-all duration-300 group overflow-hidden h-full">
+                <CardContent className="p-6 relative">
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-br from-purple-600/30 to-pink-600/30"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: hoveredCard === index ? 1 : 0 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                  <motion.div
+                    className="mb-4 relative z-10"
+                    animate={{
+                      scale: hoveredCard === index ? 1.1 : 1,
+                      rotate: hoveredCard === index ? 5 : 0,
+                    }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className="bg-purple-500/20 p-3 rounded-full inline-block">
+                      <card.icon className="w-6 h-6 text-purple-200" />
+                    </div>
+                  </motion.div>
+                  <h3 className="text-2xl font-semibold text-purple-100 mb-2 relative z-10">
+                    {card.title}
+                  </h3>
+                  <p className="text-purple-200 mb-4 relative z-10">
+                    {card.description}
+                  </p>
+                  <motion.div
+                    animate={{ x: hoveredCard === index ? 5 : 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <Button
+                      variant="link"
+                      className="text-purple-300 hover:text-white p-0 relative z-10"
+                    >
+                      Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </motion.div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
         </div>
-      </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="mt-16 text-center"
+        >
+          <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-3 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+            Get Started with 12twelve
+          </Button>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
