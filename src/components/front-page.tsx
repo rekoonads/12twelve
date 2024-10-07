@@ -1,6 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuth, UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,26 +13,27 @@ import {
   ChevronRight,
   Star,
   Menu,
+  X,
   Facebook,
   Twitter,
   Instagram,
   Youtube,
 } from "lucide-react";
-import Image from "next/image";
-import About from "./About";
-import WhyChooseUs from "./WhyChooseUs";
-import Blog from "./Blog";
-import { useRouter } from "next/navigation";
-import { useAuth, UserButton } from "@clerk/nextjs";
 import { useUserData } from "@/hooks/useUserData";
 import LoadingScreen from "./loading-screen";
 import AnimatedHeroSection from "./Hero";
+import About from "./About";
+import WhyChooseUs from "./WhyChooseUs";
 import Services from "./Services";
 import AnimatedPurplePortfolio from "./Portfolio";
+import Blog from "./Blog";
+import GetInTouch from "./GetInTouch";
+import Footer from "./Footer";
 
 export default function FrontPage() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeItem, setActiveItem] = useState<string | null>(null);
 
   const { userId } = useAuth();
   const { userData, loading, error } = useUserData();
@@ -64,221 +70,227 @@ export default function FrontPage() {
     );
   }
 
-  const testimonials = [
-    {
-      name: "Alex Johnson",
-      role: "CEO, TechCorp",
-      content:
-        "The results we've seen since partnering with this agency have been nothing short of extraordinary.",
-    },
-    {
-      name: "Sarah Lee",
-      role: "Marketing Director, FashionBrand",
-      content:
-        "Their innovative strategies have transformed our online presence and boosted our sales significantly.",
-    },
-    {
-      name: "Michael Chen",
-      role: "Founder, StartupX",
-      content:
-        "Working with this team has been a game-changer for our startup. They truly understand digital marketing.",
-    },
+  const navItems = [
+    { href: "/offers", label: "Offers" },
+    { href: "/affiliate", label: "Affiliate" },
+    { href: "#services", label: "Services" },
+    { href: "#portfolio", label: "Portfolio" },
+    { href: "#blog", label: "Blog" },
+    { href: "#contact", label: "Contact" },
   ];
 
   return (
     <div className="flex flex-col min-h-[100dvh]">
-      <header
+      <motion.header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${
-          isScrolled ? "bg-purple-600 shadow-xl" : "bg-transparent"
+          isScrolled ? "bg-purple-900/30 backdrop-blur-lg" : "bg-transparent"
         }`}
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
       >
-        <div className="container mx-auto flex items-center justify-between">
-          <a href="#" className="text-2xl font-bold text-primary">
-            <Image src={"/logo.png"} alt="Twelve" width={120} height={120} />
-          </a>
-          <nav className="hidden md:flex space-x-8 text-white">
-            <a
-              href="/offers"
-              className="text-sm font-medium hover:text-primary transition-colors"
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <motion.a
+              href="#"
+              className="relative z-10"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              Offers
-            </a>
-            <a
-              href="/affiliate"
-              className="text-sm font-medium hover:text-primary transition-colors"
+              <Image
+                src="/logo.png"
+                alt="Twelve"
+                width={80}
+                height={80}
+                className="rounded-full bg-purple-800 p-1"
+              />
+            </motion.a>
+
+            <nav className="hidden md:flex space-x-1">
+              {navItems.map((item, index) => (
+                <motion.div
+                  key={item.href}
+                  className="relative"
+                  onHoverStart={() => setActiveItem(item.label)}
+                  onHoverEnd={() => setActiveItem(null)}
+                >
+                  <Link href={item.href} passHref>
+                    <motion.a
+                      className="px-3 py-2 text-sm font-medium text-white hover:text-purple-300 transition-colors"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      {item.label}
+                    </motion.a>
+                  </Link>
+                  <AnimatePresence>
+                    {activeItem === item.label && (
+                      <motion.div
+                        className="absolute -bottom-1 left-0 right-0 h-0.5 bg-purple-400"
+                        initial={{ scaleX: 0 }}
+                        animate={{ scaleX: 1 }}
+                        exit={{ scaleX: 0 }}
+                        transition={{ duration: 0.2 }}
+                      />
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              ))}
+              {userId ? (
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="relative z-10"
+                >
+                  <UserButton />
+                </motion.div>
+              ) : (
+                <Link href="/sign-in" passHref>
+                  <motion.a
+                    className="px-3 py-2 text-sm font-medium text-white hover:text-purple-300 transition-colors"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Sign In
+                  </motion.a>
+                </Link>
+              )}
+            </nav>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              className="relative z-10 md:hidden text-white hover:text-purple-300"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-              Affiliate
-            </a>
-            <a
-              href="#services"
-              className="text-sm font-medium hover:text-primary transition-colors"
-            >
-              Services
-            </a>
-            <a
-              href="#portfolio"
-              className="text-sm font-medium hover:text-primary transition-colors"
-            >
-              Portfolio
-            </a>
-            <a
-              href="#blog"
-              className="text-sm font-medium hover:text-primary transition-colors"
-            >
-              Blog
-            </a>
-            <a
-              href="#contact"
-              className="text-sm font-medium hover:text-primary transition-colors"
-            >
-              Contact
-            </a>
-            {userId ? (
-              <div className="text-sm font-medium hover:text-primary transition-colors">
-                <UserButton />
-              </div>
-            ) : (
-              <a
-                href="/sign-in"
-                className="text-sm font-medium hover:text-primary transition-colors"
-              >
-                Sign In
-              </a>
-            )}
-          </nav>
-          <Button variant="outline" size="icon" className="md:hidden">
-            <Menu className="h-6 w-6" />
-            <span className="sr-only">Toggle menu</span>
-          </Button>
+              {isMobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+              <span className="sr-only">Toggle menu</span>
+            </Button>
+          </div>
         </div>
-      </header>
+
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="md:hidden bg-purple-900/95 backdrop-blur-md"
+            >
+              <nav className="container mx-auto px-4 py-4 flex flex-col space-y-4">
+                {navItems.map((item, index) => (
+                  <motion.div
+                    key={item.href}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <Link href={item.href} passHref>
+                      <motion.a
+                        className="flex items-center justify-between text-lg font-medium text-white hover:text-purple-300 transition-colors"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        whileHover={{ x: 10 }}
+                      >
+                        {item.label}
+                        <ChevronRight className="h-5 w-5" />
+                      </motion.a>
+                    </Link>
+                  </motion.div>
+                ))}
+                {userId ? (
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: navItems.length * 0.1 }}
+                  >
+                    <UserButton />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: navItems.length * 0.1 }}
+                  >
+                    <Link href="/sign-in" passHref>
+                      <motion.a
+                        className="flex items-center justify-between text-lg font-medium text-white hover:text-purple-300 transition-colors"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        whileHover={{ x: 10 }}
+                      >
+                        Sign In
+                        <ChevronRight className="h-5 w-5" />
+                      </motion.a>
+                    </Link>
+                  </motion.div>
+                )}
+              </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.header>
+
       <main className="flex-1">
         <AnimatedHeroSection />
 
-        <section>
-          <About />
-        </section>
-
-        <Services />
-
-        <WhyChooseUs />
-
-        <section id="portfolio">
-          <AnimatedPurplePortfolio />
-        </section>
-
-        <section id="blog">
-          <Blog />
-        </section>
-
-        <section
-          id="contact"
-          className="py-20 bg-gradient-to-br from-purple-600 via-purple-500 to-purple-400 text-white"
+        <motion.section
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
         >
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-              Get In Touch
-            </h2>
-            <div className="max-w-2xl mx-auto">
-              <form className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <Input
-                    type="text"
-                    placeholder="Your Name"
-                    className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-                  />
-                  <Input
-                    type="email"
-                    placeholder="Your Email"
-                    className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-                  />
-                </div>
-                <Input
-                  type="text"
-                  placeholder="Subject"
-                  className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-                />
-                <Textarea
-                  placeholder="Your Message"
-                  className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-                  rows={6}
-                />
-                <Button
-                  size="lg"
-                  className="w-full bg-white text-purple-600 hover:bg-purple-50"
-                >
-                  Send Message
-                </Button>
-              </form>
-            </div>
-          </div>
-        </section>
+          <About />
+        </motion.section>
+
+        <motion.section
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <Services />
+        </motion.section>
+
+        <motion.section
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
+          <WhyChooseUs />
+        </motion.section>
+
+        <motion.section
+          id="portfolio"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+        >
+          <AnimatedPurplePortfolio />
+        </motion.section>
+
+        <motion.section
+          id="blog"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.8 }}
+        >
+          <Blog />
+        </motion.section>
+
+        <motion.section
+          id="contact"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 1 }}
+        >
+          <GetInTouch />
+        </motion.section>
       </main>
-      <footer className="bg-gray-900 text-white py-8">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="text-2xl font-bold mb-4 md:mb-0">
-              <Image src={"/logo.png"} alt="Twelve" height={120} width={120} />
-            </div>
-            <nav className="flex space-x-4 mb-4 md:mb-0">
-              <a
-                href="/privacy-policy"
-                className="hover:text-emerald-400 transition-colors"
-              >
-                Privacy Policy
-              </a>
-              <a href="#" className="hover:text-emerald-400 transition-colors">
-                Terms of Service
-              </a>
-            </nav>
-            <div className="flex space-x-4 mb-4 md:mb-0">
-              <a
-                href="https://www.facebook.com/12otwelve"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white hover:text-emerald-400 transition-colors"
-              >
-                <Facebook />
-              </a>
-              <a
-                href="https://www.twitter.com/12otwelve"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white hover:text-emerald-400 transition-colors"
-              >
-                <Twitter />
-              </a>
-              <a
-                href="https://www.instagram.com/12otwelve"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white hover:text-emerald-400 transition-colors"
-              >
-                <Instagram />
-              </a>
-              <a
-                href="https://www.youtube.com/12otwelve"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white hover:text-emerald-400 transition-colors"
-              >
-                <Youtube />
-              </a>
-            </div>
-            <div className="flex flex-col text-center md:text-left mb-4 md:mb-0">
-              <a
-                href="tel:+917836001200"
-                className="text-sm text-gray-400 hover:text-emerald-400 transition-colors"
-              >
-                821-9084940
-              </a>
-              <p className="text-sm text-gray-400">Delhi India 110055</p>
-            </div>
-            <div className="text-sm text-gray-400">
-              © 2024 12twelve. All rights reserved.
-            </div>
-          </div>
-        </div>
+
+      <footer>
+        <Footer />
       </footer>
     </div>
   );
