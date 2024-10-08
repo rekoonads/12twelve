@@ -168,6 +168,15 @@ export default function Footer() {
             <MapPin className="w-4 h-4" />
             <span>Delhi, India 110055</span>
           </motion.p>
+          <div className="mt-4">
+            <span className="text-sm">CIN:- U72900DL2021PTC388171</span>
+            <br />
+          </div>
+          <div className="mt-2">
+            <span className="text-sm">
+              Company Name:- LEMONADE DIGITAL MEDIA TECHNOLOGY PRIVATE LIMITED
+            </span>
+          </div>
         </>
       ),
     },
