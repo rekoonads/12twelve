@@ -29,6 +29,7 @@ import AnimatedPurplePortfolio from "./Portfolio";
 import Blog from "./Blog";
 import GetInTouch from "./GetInTouch";
 import Footer from "./Footer";
+import { BrandSlider } from "./BrandSlider";
 
 export default function FrontPage() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -236,6 +237,14 @@ export default function FrontPage() {
 
       <main className="flex-1">
         <AnimatedHeroSection />
+
+        <motion.section
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <BrandSlider />
+        </motion.section>
 
         <motion.section
           initial={{ opacity: 0, y: 50 }}
