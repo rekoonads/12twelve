@@ -1,29 +1,40 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, useAnimation } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import {
+  motion,
+  useAnimation,
+  useMotionValue,
+  useTransform,
+} from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Zap } from "lucide-react";
+import { ArrowRight, Cpu, Wifi, Database, Cloud } from "lucide-react";
 
-const AnimatedGradientHero = () => {
+const FuturisticTechHero = () => {
   const [isHovered, setIsHovered] = useState(false);
   const controls = useAnimation();
+  const containerRef = useRef<HTMLDivElement>(null); // Type added
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const rotateX = useTransform(mouseY, [-300, 300], [5, -5]);
+  const rotateY = useTransform(mouseX, [-300, 300], [-5, 5]);
 
   useEffect(() => {
-    controls.start({
-      background: [
-        "linear-gradient(to bottom right, #3b82f6, #6366f1, #8b5cf6)",
-        "linear-gradient(to bottom right, #6366f1, #8b5cf6, #d946ef)",
-        "linear-gradient(to bottom right, #8b5cf6, #d946ef, #f43f5e)",
-        "linear-gradient(to bottom right, #3b82f6, #6366f1, #8b5cf6)",
-      ],
-      transition: {
-        duration: 10,
-        repeat: Infinity,
-        repeatType: "reverse",
-      },
-    });
-  }, [controls]);
+    const handleMouseMove = (event: MouseEvent) => {
+      // Event type added
+      const { clientX, clientY } = event;
+      const { left, top, width, height } =
+        containerRef.current!.getBoundingClientRect();
+      mouseX.set(clientX - left - width / 2);
+      mouseY.set(clientY - top - height / 2);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, [mouseX, mouseY]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -31,6 +42,7 @@ const AnimatedGradientHero = () => {
       opacity: 1,
       transition: {
         staggerChildren: 0.2,
+        delayChildren: 0.3,
       },
     },
   };
@@ -42,90 +54,43 @@ const AnimatedGradientHero = () => {
       y: 0,
       transition: {
         duration: 0.8,
+        ease: [0.6, -0.05, 0.01, 0.99],
       },
     },
   };
 
+  const iconVariants = {
+    hover: { scale: 1.2, rotate: 360, transition: { duration: 0.3 } },
+  };
+
   return (
-    <motion.section
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
-      animate={controls}
-    >
-      <div className="absolute inset-0 bg-black opacity-50" />
-      <div className="container mx-auto px-4 relative z-10">
-        <motion.div
-          className="flex flex-col items-center text-center"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <motion.div variants={itemVariants} className="mb-8 animate-pulse">
-            <Zap size={64} className="text-yellow-400" />
-          </motion.div>
-          <motion.h1
-            variants={itemVariants}
-            className="text-4xl md:text-6xl font-extrabold mb-6 text-white"
-          >
-            Ignite Your Digital Potential
-          </motion.h1>
-          <motion.p
-            variants={itemVariants}
-            className="text-xl md:text-2xl mb-8 text-gray-300 max-w-2xl"
-          >
-            Harness the power of cutting-edge technology to transform your
-            online presence and drive unprecedented growth.
-          </motion.p>
-          <motion.div
-            variants={itemVariants}
-            className="flex flex-col sm:flex-row gap-4"
-          >
-            <Button
-              size="lg"
-              className="bg-yellow-400 text-blue-900 hover:bg-yellow-300 transition-all duration-300 ease-in-out transform hover:scale-105"
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-purple-900 via-purple-700 to-purple-500">
+      <div className="absolute inset-0">
+        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern
+              id="hexagons"
+              width="50"
+              height="43.4"
+              patternUnits="userSpaceOnUse"
+              patternTransform="scale(2) rotate(0)"
             >
-              Get Started
-              <ArrowRight
-                className={`ml-2 h-5 w-5 transition-transform duration-300 ${
-                  isHovered ? "translate-x-1" : ""
-                }`}
+              <path
+                d="M25 17.3L0 0v34.6l25 17.3 25-17.3V0L25 17.3z"
+                fill="none"
+                stroke="rgba(255, 255, 255, 0.1)"
+                strokeWidth="1"
               />
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="text-black border-white hover:bg-white hover:text-blue-900 transition-all duration-300 ease-in-out transform hover:scale-105"
-            >
-              Learn More
-            </Button>
-          </motion.div>
-        </motion.div>
-      </div>
-      <motion.div
-        className="absolute bottom-0 left-0 right-0"
-        initial={{ y: 100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 1, delay: 1 }}
-      >
-        <svg
-          className="w-full h-20 fill-current text-white opacity-20"
-          viewBox="0 0 1000 100"
-          preserveAspectRatio="none"
-        >
-          <path d="M0,0 C200,100 800,100 1000,0 L1000,100 L0,100 Z" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#hexagons)" />
         </svg>
-      </motion.div>
-      <motion.div
-        className="absolute top-0 left-0 w-full h-full pointer-events-none"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 2 }}
-      >
-        {[...Array(20)].map((_, i) => (
+      </div>
+      <div className="absolute inset-0">
+        {[...Array(50)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-2 h-2 bg-white rounded-full"
+            className="absolute w-1 h-1 bg-purple-300 rounded-full"
             initial={{
               x: Math.random() * window.innerWidth,
               y: Math.random() * window.innerHeight,
@@ -143,9 +108,107 @@ const AnimatedGradientHero = () => {
             }}
           />
         ))}
+      </div>
+      <div className="container mx-auto px-4 relative z-10" ref={containerRef}>
+        <motion.div
+          className="flex flex-col items-center text-center"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          style={{ perspective: 1000 }}
+        >
+          <motion.div
+            className="mb-8 grid grid-cols-2 gap-4"
+            style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+          >
+            <motion.div
+              whileHover="hover"
+              variants={iconVariants}
+              className="bg-purple-800 p-4 rounded-lg"
+            >
+              <Cpu size={48} className="text-purple-300 mx-auto" />
+              <p className="text-purple-200 mt-2">Advanced Processing</p>
+            </motion.div>
+            <motion.div
+              whileHover="hover"
+              variants={iconVariants}
+              className="bg-purple-800 p-4 rounded-lg"
+            >
+              <Wifi size={48} className="text-purple-300 mx-auto" />
+              <p className="text-purple-200 mt-2">Seamless Connectivity</p>
+            </motion.div>
+            <motion.div
+              whileHover="hover"
+              variants={iconVariants}
+              className="bg-purple-800 p-4 rounded-lg"
+            >
+              <Database size={48} className="text-purple-300 mx-auto" />
+              <p className="text-purple-200 mt-2">Robust Data Management</p>
+            </motion.div>
+            <motion.div
+              whileHover="hover"
+              variants={iconVariants}
+              className="bg-purple-800 p-4 rounded-lg"
+            >
+              <Cloud size={48} className="text-purple-300 mx-auto" />
+              <p className="text-purple-200 mt-2">Cloud Integration</p>
+            </motion.div>
+          </motion.div>
+          <motion.h1
+            variants={itemVariants}
+            className="text-5xl md:text-7xl font-extrabold mb-6 text-white"
+            style={{
+              textShadow: "0 0 20px rgba(139, 92, 246, 0.7)",
+              letterSpacing: "-0.05em",
+            }}
+          >
+            Revolutionize Your Tech Stack
+          </motion.h1>
+          <motion.p
+            variants={itemVariants}
+            className="text-xl md:text-2xl mb-8 text-purple-200 max-w-2xl"
+          >
+            Harness the power of cutting-edge technologies to build scalable,
+            efficient, and innovative solutions for the future.
+          </motion.p>
+          <motion.div
+            variants={itemVariants}
+            className="flex flex-col sm:flex-row gap-4"
+          >
+            <Button
+              size="lg"
+              className="bg-purple-500 text-white hover:bg-purple-400 transition-all duration-300 ease-in-out transform hover:scale-105 hover:rotate-1"
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
+              Explore Technologies
+              <ArrowRight
+                className={`ml-2 h-5 w-5 transition-transform duration-300 ${
+                  isHovered ? "translate-x-1" : ""
+                }`}
+              />
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="text-purple-500 border-purple-300 hover:bg-purple-800 hover:text-purple-100 transition-all duration-300 ease-in-out transform hover:scale-105 hover:-rotate-1"
+            >
+              View Case Studies
+            </Button>
+          </motion.div>
+        </motion.div>
+      </div>
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-purple-900 to-transparent" />
+      <motion.div
+        className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
+        initial={{ y: 0 }}
+        animate={{ y: [-10, 10] }}
+        transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse" }}
+      >
+        <ArrowRight size={32} className="text-purple-300 rotate-90" />
       </motion.div>
-    </motion.section>
+    </section>
   );
 };
 
-export default AnimatedGradientHero;
+export default FuturisticTechHero;
