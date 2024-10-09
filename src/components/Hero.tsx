@@ -8,7 +8,17 @@ import {
   useTransform,
 } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Cpu, Wifi, Database, Cloud } from "lucide-react";
+import {
+  ArrowRight,
+  Cpu,
+  Wifi,
+  Database,
+  Cloud,
+  Presentation,
+  Code,
+  Instagram,
+  Megaphone,
+} from "lucide-react";
 
 const FuturisticTechHero = () => {
   const [isHovered, setIsHovered] = useState(false);
@@ -126,32 +136,32 @@ const FuturisticTechHero = () => {
               variants={iconVariants}
               className="bg-purple-800 p-4 rounded-lg"
             >
-              <Cpu size={48} className="text-purple-300 mx-auto" />
-              <p className="text-purple-200 mt-2">Advanced Processing</p>
+              <Presentation size={48} className="text-purple-300 mx-auto" />
+              <p className="text-purple-200 mt-2">Digital Marketing</p>
             </motion.div>
             <motion.div
               whileHover="hover"
               variants={iconVariants}
               className="bg-purple-800 p-4 rounded-lg"
             >
-              <Wifi size={48} className="text-purple-300 mx-auto" />
-              <p className="text-purple-200 mt-2">Seamless Connectivity</p>
+              <Code size={48} className="text-purple-300 mx-auto" />
+              <p className="text-purple-200 mt-2">Website Development</p>
             </motion.div>
             <motion.div
               whileHover="hover"
               variants={iconVariants}
               className="bg-purple-800 p-4 rounded-lg"
             >
-              <Database size={48} className="text-purple-300 mx-auto" />
-              <p className="text-purple-200 mt-2">Robust Data Management</p>
+              <Instagram size={48} className="text-purple-300 mx-auto" />
+              <p className="text-purple-200 mt-2">Social Media Marketing</p>
             </motion.div>
             <motion.div
               whileHover="hover"
               variants={iconVariants}
               className="bg-purple-800 p-4 rounded-lg"
             >
-              <Cloud size={48} className="text-purple-300 mx-auto" />
-              <p className="text-purple-200 mt-2">Cloud Integration</p>
+              <Megaphone size={48} className="text-purple-300 mx-auto" />
+              <p className="text-purple-200 mt-2">SEO Optimization</p>
             </motion.div>
           </motion.div>
           <motion.h1
