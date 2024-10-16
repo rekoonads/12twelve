@@ -1,35 +1,25 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { useUserData } from "@/hooks/useUserData";
+import { useAuth, UserButton } from "@clerk/nextjs";
+import { AnimatePresence, motion } from "framer-motion";
+import { ChevronRight, Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useAuth, UserButton } from "@clerk/nextjs";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  ChevronRight,
-  Star,
-  Menu,
-  X,
-  Facebook,
-  Twitter,
-  Instagram,
-  Youtube,
-} from "lucide-react";
-import { useUserData } from "@/hooks/useUserData";
-import LoadingScreen from "./loading-screen";
-import AnimatedHeroSection from "./Hero";
+import { useEffect, useState } from "react";
 import About from "./About";
-import WhyChooseUs from "./WhyChooseUs";
-import Services from "./Services";
-import AnimatedPurplePortfolio from "./Portfolio";
 import Blog from "./Blog";
-import GetInTouch from "./GetInTouch";
-import Footer from "./Footer";
 import { BrandSlider } from "./BrandSlider";
+import Footer from "./Footer";
+import GetInTouch from "./GetInTouch";
+import AnimatedHeroSection from "./Hero";
+import LoadingScreen from "./loading-screen";
+import AnimatedPurplePortfolio from "./Portfolio";
+import Services from "./Services";
+import WhyChooseUs from "./WhyChooseUs";
+import FAQ from "./FAQ";
 
 export default function FrontPage() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -73,6 +63,7 @@ export default function FrontPage() {
 
   const navItems = [
     { href: "/offers", label: "Offers" },
+    { href: "/hiring", label: "Influencers" },
     { href: "/affiliate", label: "Affiliate" },
     { href: "#services", label: "Services" },
     { href: "#portfolio", label: "Portfolio" },
@@ -258,6 +249,7 @@ export default function FrontPage() {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
+          id="services"
         >
           <Services />
         </motion.section>
@@ -286,6 +278,15 @@ export default function FrontPage() {
           transition={{ duration: 0.5, delay: 0.8 }}
         >
           <Blog />
+        </motion.section>
+
+        <motion.section
+          id="blog"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.8 }}
+        >
+          <FAQ />
         </motion.section>
 
         <motion.section
