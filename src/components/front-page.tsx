@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useUserData } from "@/hooks/useUserData";
-import { useAuth, UserButton } from "@clerk/nextjs";
+import { useAuth, UserButton, useUser } from "@clerk/nextjs";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronRight, Menu, X } from "lucide-react";
 import Image from "next/image";
@@ -20,13 +20,17 @@ import AnimatedPurplePortfolio from "./Portfolio";
 import Services from "./Services";
 import WhyChooseUs from "./WhyChooseUs";
 import FAQ from "./FAQ";
+import UserTypeSelection from "./user-type-selection";
 
 export default function FrontPage() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeItem, setActiveItem] = useState<string | null>(null);
+  const [showTypeSelection, setShowTypeSelection] = useState(false);
+  const [userTypeChecked, setUserTypeChecked] = useState(false);
 
   const { userId } = useAuth();
+  const { user } = useUser();
   const { userData, loading, error } = useUserData();
   const router = useRouter();
 
@@ -39,17 +43,19 @@ export default function FrontPage() {
   }, []);
 
   useEffect(() => {
-    if (
-      !loading &&
-      userData &&
-      userData.userType === "influencer" &&
-      userData.userId
-    ) {
-      router.push(`/influencers/${userData.userId}`);
+    if (!loading && userId) {
+      if (!userData || !userData.userType) {
+        setShowTypeSelection(true);
+      } else if (userData.userType === "influencer") {
+        router.push(`/influencers/${userId}`);
+      } else if (userData.userType === "brand") {
+        router.push(`/brands/${userId}`);
+      }
     }
-  }, [loading, userData, router]);
+    setUserTypeChecked(true);
+  }, [loading, userData, userId, router]);
 
-  if (loading) {
+  if (loading || !userTypeChecked) {
     return <LoadingScreen />;
   }
 
@@ -58,6 +64,17 @@ export default function FrontPage() {
       <div className="flex items-center justify-center min-h-screen">
         Error: {error.message}
       </div>
+    );
+  }
+
+  if (showTypeSelection && userId && user) {
+    return (
+      <UserTypeSelection
+        userId={userId}
+        firstName={user.firstName ?? ""}
+        lastName={user.lastName ?? ""}
+        email={user.primaryEmailAddress?.emailAddress ?? ""}
+      />
     );
   }
 
@@ -228,7 +245,6 @@ export default function FrontPage() {
 
       <main className="flex-1">
         <AnimatedHeroSection />
-
         <motion.section
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -236,7 +252,6 @@ export default function FrontPage() {
         >
           <BrandSlider />
         </motion.section>
-
         <motion.section
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -244,7 +259,6 @@ export default function FrontPage() {
         >
           <About />
         </motion.section>
-
         <motion.section
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -253,7 +267,6 @@ export default function FrontPage() {
         >
           <Services />
         </motion.section>
-
         <motion.section
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -261,7 +274,6 @@ export default function FrontPage() {
         >
           <WhyChooseUs />
         </motion.section>
-
         <motion.section
           id="portfolio"
           initial={{ opacity: 0, y: 50 }}
@@ -270,7 +282,6 @@ export default function FrontPage() {
         >
           <AnimatedPurplePortfolio />
         </motion.section>
-
         <motion.section
           id="blog"
           initial={{ opacity: 0, y: 50 }}
@@ -279,7 +290,6 @@ export default function FrontPage() {
         >
           <Blog />
         </motion.section>
-
         <motion.section
           id="blog"
           initial={{ opacity: 0, y: 50 }}
@@ -288,7 +298,6 @@ export default function FrontPage() {
         >
           <FAQ />
         </motion.section>
-
         <motion.section
           id="contact"
           initial={{ opacity: 0, y: 50 }}

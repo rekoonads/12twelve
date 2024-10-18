@@ -141,16 +141,28 @@ const MotionCard = motion(Card);
 
 const COLORS = ["#8b5cf6", "#6d28d9", "#5b21b6", "#4c1d95", "#3b0764"];
 
-export default function RedesignedDashboard() {
+interface RedesignedDashboardProps {
+  brandId: string;
+}
+
+export default function RedesignedDashboard({
+  brandId,
+}: RedesignedDashboardProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCard, setActiveCard] = useState<number | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const controls = useAnimation();
 
   useEffect(() => {
+    console.log("Brand ID:", brandId);
+  }, [brandId]);
+
+  useEffect(() => {
     setIsLoaded(true);
     controls.start("visible");
-  }, [controls]);
+    // You can use the brandId here to fetch brand-specific data
+    console.log("Brand ID:", brandId);
+  }, [controls, brandId]);
 
   const filteredInfluencers = influencers.filter((influencer) =>
     influencer.name.toLowerCase().includes(searchTerm.toLowerCase())
