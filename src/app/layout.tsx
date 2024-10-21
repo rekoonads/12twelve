@@ -7,25 +7,25 @@ import Script from "next/script";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "12twelve | Digital Marketing & Influencer Agency",
+  title: "12twelve | Top Digital Marketing & Influencer Agency in India",
   description:
-    "12twelve is a leading digital marketing agency specializing in influencer marketing. We connect brands with top influencers across various platforms to drive engagement and growth.",
+    "12twelve (my12twelve) is India's leading digital marketing and influencer agency. We connect brands with top influencers across platforms to drive engagement and growth. Discover our innovative marketing solutions today!",
   keywords: [
     "12twelve",
     "my12twelve",
-    "digital marketing",
-    "influencer marketing",
+    "digital marketing India",
+    "influencer marketing India",
     "social media marketing",
     "brand partnerships",
     "content creation",
     "influencer outreach",
     "digital strategy",
-    "marketing agency",
+    "marketing agency Delhi",
   ],
   openGraph: {
-    title: "12twelve | Digital Marketing & Influencer Agency",
+    title: "12twelve | Top Digital Marketing & Influencer Agency in India",
     description:
-      "Connect with top influencers and boost your brand's digital presence with 12twelve's innovative marketing solutions.",
+      "12twelve (my12twelve) connects brands with top influencers across India. Boost your digital presence with our innovative marketing solutions. Expert digital marketing and influencer partnerships for Indian brands.",
     url: "https://www.my12twelve.com",
     siteName: "12twelve",
     images: [
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
         url: "https://www.my12twelve.com/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "12twelve - Digital Marketing & Influencer Agency",
+        alt: "12twelve - Leading Digital Marketing & Influencer Agency in India",
       },
     ],
     locale: "en_IN",
@@ -41,9 +41,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "12twelve | Digital Marketing & Influencer Agency",
+    title: "12twelve | Top Digital Marketing & Influencer Agency in India",
     description:
-      "Elevate your brand with 12twelve's expert digital marketing and influencer partnerships. Discover our innovative solutions today!",
+      "Elevate your brand with 12twelve's expert digital marketing and influencer partnerships in India. Discover our innovative solutions today! #my12twelve #DigitalMarketingIndia",
     images: ["https://www.my12twelve.com/twitter-image.jpg"],
   },
   alternates: {
@@ -69,13 +69,15 @@ export default function RootLayout({
                 "@context": "https://schema.org",
                 "@type": "MarketingAgency",
                 name: "12twelve",
-                description: "Digital Marketing & Influencer Agency",
+                alternateName: "my12twelve",
+                description:
+                  "Leading Digital Marketing & Influencer Agency in India",
                 url: "https://www.my12twelve.com",
                 logo: "https://www.my12twelve.com/logo.png",
                 sameAs: [
                   "https://www.facebook.com/12twelve",
-                  "https://www.instagram.com/12twelve",
-                  "https://www.linkedin.com/company/12twelve",
+                  "https://www.instagram.com/12otwelve",
+                  "https://www.linkedin.com/company/120twelve",
                   "https://www.twitter.com/12twelve",
                 ],
                 address: {
@@ -88,9 +90,22 @@ export default function RootLayout({
                 },
                 telephone: "+917836001200",
                 email: "hello@my12twelve.com",
+                areaServed: "India",
+                serviceType: [
+                  "Digital Marketing",
+                  "Influencer Marketing",
+                  "Social Media Marketing",
+                  "Content Creation",
+                  "Brand Partnerships",
+                ],
+                knowsLanguage: ["English", "Hindi"],
               }),
             }}
           />
+          <meta name="geo.region" content="IN-DL" />
+          <meta name="geo.placename" content="Delhi" />
+          <meta name="geo.position" content="28.6139;77.2090" />
+          <meta name="ICBM" content="28.6139, 77.2090" />
         </head>
         <body className={inter.className}>
           {children}
