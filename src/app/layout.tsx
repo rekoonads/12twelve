@@ -7,12 +7,12 @@ import Script from "next/script";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "12twelve | Top Digital Marketing & Influencer Agency in India",
+  title: "my12twelve | Premier Digital Marketing & Influencer Agency in India",
   description:
-    "12twelve (my12twelve) is India's leading digital marketing and influencer agency. We connect brands with top influencers across platforms to drive engagement and growth. Discover our innovative marketing solutions today!",
+    "my12twelve (12twelve) is India's leading digital marketing and influencer agency. We connect brands with top influencers to drive engagement and growth. Discover our innovative marketing solutions!",
   keywords: [
-    "12twelve",
     "my12twelve",
+    "12twelve",
     "digital marketing India",
     "influencer marketing India",
     "social media marketing",
@@ -23,17 +23,18 @@ export const metadata: Metadata = {
     "marketing agency Delhi",
   ],
   openGraph: {
-    title: "12twelve | Top Digital Marketing & Influencer Agency in India",
+    title:
+      "my12twelve | Premier Digital Marketing & Influencer Agency in India",
     description:
-      "12twelve (my12twelve) connects brands with top influencers across India. Boost your digital presence with our innovative marketing solutions. Expert digital marketing and influencer partnerships for Indian brands.",
+      "my12twelve (12twelve) is your go-to digital marketing and influencer agency in India. We specialize in creating impactful campaigns and connecting brands with top influencers across all major platforms.",
     url: "https://www.my12twelve.com",
-    siteName: "12twelve",
+    siteName: "my12twelve",
     images: [
       {
         url: "https://www.my12twelve.com/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "12twelve - Leading Digital Marketing & Influencer Agency in India",
+        alt: "my12twelve - Leading Digital Marketing & Influencer Agency in India",
       },
     ],
     locale: "en_IN",
@@ -41,9 +42,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "12twelve | Top Digital Marketing & Influencer Agency in India",
+    title:
+      "my12twelve | Premier Digital Marketing & Influencer Agency in India",
     description:
-      "Elevate your brand with 12twelve's expert digital marketing and influencer partnerships in India. Discover our innovative solutions today! #my12twelve #DigitalMarketingIndia",
+      "Elevate your brand with my12twelve's expert digital marketing and influencer partnerships in India. Discover our innovative solutions today! #my12twelve #DigitalMarketingIndia",
     images: ["https://www.my12twelve.com/twitter-image.jpg"],
   },
   alternates: {
@@ -68,17 +70,16 @@ export default function RootLayout({
               __html: JSON.stringify({
                 "@context": "https://schema.org",
                 "@type": "MarketingAgency",
-                name: "12twelve",
-                alternateName: "my12twelve",
+                name: "my12twelve",
+                alternateName: "12twelve",
                 description:
-                  "Leading Digital Marketing & Influencer Agency in India",
+                  "Premier Digital Marketing & Influencer Agency in India",
                 url: "https://www.my12twelve.com",
                 logo: "https://www.my12twelve.com/logo.png",
                 sameAs: [
-                  "https://www.facebook.com/12twelve",
-                  "https://www.instagram.com/12otwelve",
-                  "https://www.linkedin.com/company/120twelve",
-                  "https://www.twitter.com/12twelve",
+                  "https://www.instagram.com/my12twelve",
+                  "https://www.linkedin.com/company/my12twelve",
+                  "https://x.com/12oTwelve",
                 ],
                 address: {
                   "@type": "PostalAddress",

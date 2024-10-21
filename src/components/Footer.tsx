@@ -5,10 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Facebook,
+  Linkedin,
   Twitter,
   Instagram,
-  Youtube,
   Phone,
   MapPin,
   ChevronDown,
@@ -87,24 +86,19 @@ export default function Footer() {
 
   const socialLinks = [
     {
-      name: "Facebook",
-      icon: Facebook,
-      href: "https://www.facebook.com/12otwelve",
+      name: "Linkedin",
+      icon: Linkedin,
+      href: "https://www.linkedin.com/company/120twelve/",
     },
     {
       name: "Twitter",
       icon: Twitter,
-      href: "https://www.twitter.com/12otwelve",
+      href: "https://x.com/12oTwelve",
     },
     {
       name: "Instagram",
       icon: Instagram,
-      href: "https://www.instagram.com/12otwelve",
-    },
-    {
-      name: "Youtube",
-      icon: Youtube,
-      href: "https://www.youtube.com/12otwelve",
+      href: "https://www.instagram.com/12otwelve/",
     },
   ];
 
