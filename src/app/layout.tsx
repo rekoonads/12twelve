@@ -7,8 +7,9 @@ import Head from "next/head"; // Import Head component
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "12otwelve",
-  description: "Ecommerce media agency provider!",
+  title: "12twelve",
+  description:
+    "Harness the power of cutting-edge technologies to build scalable, efficient, and innovative solutions for the future.",
 };
 
 export default function RootLayout({
