@@ -36,7 +36,7 @@ export const metadata: Metadata = {
         alt: "12twelve - Digital Marketing & Influencer Agency",
       },
     ],
-    locale: "en_US",
+    locale: "en_IN",
     type: "website",
   },
   twitter: {
@@ -80,14 +80,14 @@ export default function RootLayout({
                 ],
                 address: {
                   "@type": "PostalAddress",
-                  streetAddress: "123 Marketing Street",
-                  addressLocality: "Digital City",
-                  addressRegion: "DC",
-                  postalCode: "12345",
-                  addressCountry: "US",
+                  streetAddress: "Delhi, India, 110093",
+                  addressLocality: "Delhi",
+                  addressRegion: "DL",
+                  postalCode: "110093",
+                  addressCountry: "IN",
                 },
-                telephone: "+1-123-456-7890",
-                email: "contact@my12twelve.com",
+                telephone: "+917836001200",
+                email: "hello@my12twelve.com",
               }),
             }}
           />
@@ -95,7 +95,7 @@ export default function RootLayout({
         <body className={inter.className}>
           {children}
           <Script
-            src="https://www.googletagmanager.com/gtag/js?id=AW-16709628315"
+            src="https://www.googletagmanager.com/gtag/js?id=G-XMBMGG2511"
             strategy="afterInteractive"
           />
           <Script id="google-analytics" strategy="afterInteractive">
@@ -103,7 +103,7 @@ export default function RootLayout({
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', 'AW-16709628315');
+              gtag('config', 'G-XMBMGG2511');
             `}
           </Script>
         </body>
