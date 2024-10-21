@@ -7,28 +7,33 @@ import Script from "next/script";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "12twelve | Innovative Technology Solutions",
+  title: "12twelve | Digital Marketing & Influencer Agency",
   description:
-    "my12twelve.com - Harness the power of cutting-edge technologies to build scalable, efficient, and innovative solutions for the future.",
+    "12twelve is a leading digital marketing agency specializing in influencer marketing. We connect brands with top influencers across various platforms to drive engagement and growth.",
   keywords: [
     "12twelve",
     "my12twelve",
-    "technology",
-    "innovation",
-    "scalable solutions",
+    "digital marketing",
+    "influencer marketing",
+    "social media marketing",
+    "brand partnerships",
+    "content creation",
+    "influencer outreach",
+    "digital strategy",
+    "marketing agency",
   ],
   openGraph: {
-    title: "12twelve | Innovative Technology Solutions",
+    title: "12twelve | Digital Marketing & Influencer Agency",
     description:
-      "my12twelve.com - Harness the power of cutting-edge technologies to build scalable, efficient, and innovative solutions for the future.",
-    url: "https://my12twelve.com",
+      "Connect with top influencers and boost your brand's digital presence with 12twelve's innovative marketing solutions.",
+    url: "https://www.my12twelve.com",
     siteName: "12twelve",
     images: [
       {
-        url: "https://my12twelve.com/og-image.jpg",
+        url: "https://www.my12twelve.com/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "12twelve - Innovative Technology Solutions",
+        alt: "12twelve - Digital Marketing & Influencer Agency",
       },
     ],
     locale: "en_US",
@@ -36,13 +41,13 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "12twelve | Innovative Technology Solutions",
+    title: "12twelve | Digital Marketing & Influencer Agency",
     description:
-      "my12twelve.com - Harness the power of cutting-edge technologies to build scalable, efficient, and innovative solutions for the future.",
-    images: ["https://my12twelve.com/twitter-image.jpg"],
+      "Elevate your brand with 12twelve's expert digital marketing and influencer partnerships. Discover our innovative solutions today!",
+    images: ["https://www.my12twelve.com/twitter-image.jpg"],
   },
   alternates: {
-    canonical: "https://my12twelve.com",
+    canonical: "https://www.my12twelve.com",
   },
 };
 
@@ -56,6 +61,36 @@ export default function RootLayout({
       <html lang="en">
         <head>
           <link rel="icon" href="/favicon.ico" sizes="any" />
+          <Script
+            id="structured-data"
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "MarketingAgency",
+                name: "12twelve",
+                description: "Digital Marketing & Influencer Agency",
+                url: "https://www.my12twelve.com",
+                logo: "https://www.my12twelve.com/logo.png",
+                sameAs: [
+                  "https://www.facebook.com/12twelve",
+                  "https://www.instagram.com/12twelve",
+                  "https://www.linkedin.com/company/12twelve",
+                  "https://www.twitter.com/12twelve",
+                ],
+                address: {
+                  "@type": "PostalAddress",
+                  streetAddress: "123 Marketing Street",
+                  addressLocality: "Digital City",
+                  addressRegion: "DC",
+                  postalCode: "12345",
+                  addressCountry: "US",
+                },
+                telephone: "+1-123-456-7890",
+                email: "contact@my12twelve.com",
+              }),
+            }}
+          />
         </head>
         <body className={inter.className}>
           {children}
