@@ -198,7 +198,7 @@ const SleekAnimatedWhyChooseUs: React.FC = () => {
       ref={sectionRef}
       className="relative w-full py-24 md:py-32 lg:py-40 overflow-hidden bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900 text-white"
     >
-      <AnimatedBackground />
+      {/* <AnimatedBackground /> */}
       <div className="container relative z-10 mx-auto px-4 md:px-6">
         <motion.div
           initial={{ opacity: 0, y: -50 }}
