@@ -5,7 +5,8 @@ import { motion, useAnimation } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Send, CheckCircle } from "lucide-react";
+import { Send, CheckCircle, AlertCircle } from "lucide-react";
+import { submitMessage } from "@/app/actions/submitMessage";
 
 const LuxuryBackground = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -86,12 +87,27 @@ const LuxuryBackground = () => {
 };
 
 export default function GetInTouch() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Simulate form submission
-    setTimeout(() => setIsSubmitted(true), 1000);
+    setIsSubmitting(true);
+    setError(null);
+
+    const formData = new FormData(e.currentTarget);
+    const result = await submitMessage(formData);
+
+    if (result.success) {
+      setIsSubmitted(true);
+      formRef.current?.reset();
+    } else {
+      setError(result.error || "An unexpected error occurred");
+    }
+
+    setIsSubmitting(false);
   };
 
   const inputVariants = {
@@ -122,6 +138,7 @@ export default function GetInTouch() {
         </motion.h2>
         <div className="max-w-2xl mx-auto">
           <motion.form
+            ref={formRef}
             className="space-y-6 backdrop-blur-xl bg-white/5 p-8 rounded-2xl shadow-2xl border border-purple-500/20"
             variants={formVariants}
             initial="hidden"
@@ -132,30 +149,47 @@ export default function GetInTouch() {
               <motion.div variants={inputVariants}>
                 <Input
                   type="text"
+                  name="name"
                   placeholder="Your Name"
                   className="bg-purple-900/20 border-purple-500/30 text-purple-100 placeholder:text-purple-300/60 focus:border-purple-400 focus:ring-2 focus:ring-purple-500"
+                  required
                 />
               </motion.div>
               <motion.div variants={inputVariants}>
                 <Input
                   type="email"
+                  name="email"
                   placeholder="Your Email"
                   className="bg-purple-900/20 border-purple-500/30 text-purple-100 placeholder:text-purple-300/60 focus:border-purple-400 focus:ring-2 focus:ring-purple-500"
+                  required
                 />
               </motion.div>
             </div>
             <motion.div variants={inputVariants}>
               <Input
+                type="tel"
+                name="phoneNumber"
+                placeholder="Your Phone Number"
+                className="bg-purple-900/20 border-purple-500/30 text-purple-100 placeholder:text-purple-300/60 focus:border-purple-400 focus:ring-2 focus:ring-purple-500"
+                required
+              />
+            </motion.div>
+            <motion.div variants={inputVariants}>
+              <Input
                 type="text"
+                name="subject"
                 placeholder="Subject"
                 className="bg-purple-900/20 border-purple-500/30 text-purple-100 placeholder:text-purple-300/60 focus:border-purple-400 focus:ring-2 focus:ring-purple-500"
+                required
               />
             </motion.div>
             <motion.div variants={inputVariants}>
               <Textarea
+                name="message"
                 placeholder="Your Message"
                 className="bg-purple-900/20 border-purple-500/30 text-purple-100 placeholder:text-purple-300/60 focus:border-purple-400 focus:ring-2 focus:ring-purple-500"
                 rows={6}
+                required
               />
             </motion.div>
             <motion.div variants={inputVariants}>
@@ -163,9 +197,17 @@ export default function GetInTouch() {
                 type="submit"
                 size="lg"
                 className="w-full bg-gradient-to-r from-purple-500 to-purple-700 text-white hover:from-purple-600 hover:to-purple-800 transition-all duration-300 group shadow-lg"
-                disabled={isSubmitted}
+                disabled={isSubmitting || isSubmitted}
               >
-                {isSubmitted ? (
+                {isSubmitting ? (
+                  <motion.span
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="flex items-center justify-center"
+                  >
+                    Sending...
+                  </motion.span>
+                ) : isSubmitted ? (
                   <motion.span
                     initial={{ opacity: 0, scale: 0.5 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -184,6 +226,15 @@ export default function GetInTouch() {
                 )}
               </Button>
             </motion.div>
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-red-500 flex items-center"
+              >
+                <AlertCircle className="mr-2" /> {error}
+              </motion.div>
+            )}
           </motion.form>
         </div>
       </div>

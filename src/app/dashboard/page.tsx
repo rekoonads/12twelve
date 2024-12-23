@@ -38,6 +38,8 @@ import {
   LogOut,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getContactSubmissions } from "../actions/getContactSubmissions";
+import type { Message } from "@prisma/client";
 
 interface Website {
   name: string;
@@ -82,6 +84,10 @@ interface MockData {
   influencers: Influencer[];
   profitDistribution: ProfitDistribution[];
   partneredBrands: Brand[];
+}
+
+interface DashboardData extends MockData {
+  contactSubmissions: Message[];
 }
 
 const mockData: MockData = {
@@ -220,10 +226,17 @@ const COLORS = ["#8b5cf6", "#10b981"];
 export default function Dashboard() {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [isClient, setIsClient] = useState(false);
+  const [contactSubmissions, setContactSubmissions] = useState<Message[]>([]);
 
   useEffect(() => {
     setIsClient(true);
+    fetchContactSubmissions();
   }, []);
+
+  const fetchContactSubmissions = async () => {
+    const submissions = await getContactSubmissions();
+    setContactSubmissions(submissions);
+  };
 
   const handleLogout = () => {
     // Implement logout logic here
@@ -527,7 +540,7 @@ export default function Dashboard() {
             </div>
           </AnimatedCard>
         </div>
-        <AnimatedCard title="Partnered Brands">
+        <AnimatedCard title="Partnered Brands" className="mb-8">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {mockData.partneredBrands.map((brand, index) => (
               <motion.div
@@ -547,6 +560,54 @@ export default function Dashboard() {
                 <p className="text-white/60 text-xs mt-1">{brand.category}</p>
               </motion.div>
             ))}
+          </div>
+        </AnimatedCard>
+        <AnimatedCard title="Contact Form Submissions">
+          <div className="max-h-[400px] overflow-y-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="text-white">Name</TableHead>
+                  <TableHead className="text-white">Email</TableHead>
+                  <TableHead className="text-white">Phone</TableHead>
+                  <TableHead className="text-white">Subject</TableHead>
+                  <TableHead className="text-white">Message</TableHead>
+                  <TableHead className="text-white">Date</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {contactSubmissions.map((submission, index) => (
+                  <motion.tr
+                    key={submission.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="border-b border-white/10"
+                  >
+                    <TableCell className="font-medium text-white py-3">
+                      {submission.name}
+                    </TableCell>
+                    <TableCell className="text-white py-3">
+                      {submission.email}
+                    </TableCell>
+                    <TableCell className="text-white py-3">
+                      {submission.phoneNumber}
+                    </TableCell>
+                    <TableCell className="text-white py-3">
+                      {submission.subject}
+                    </TableCell>
+                    <TableCell className="text-white py-3">
+                      {submission.message.length > 50
+                        ? `${submission.message.substring(0, 50)}...`
+                        : submission.message}
+                    </TableCell>
+                    <TableCell className="text-white py-3">
+                      {new Date(submission.createdAt).toLocaleDateString()}
+                    </TableCell>
+                  </motion.tr>
+                ))}
+              </TableBody>
+            </Table>
           </div>
         </AnimatedCard>
       </div>
@@ -629,14 +690,16 @@ function TrendIndicator({ value }: TrendIndicatorProps) {
 interface AnimatedCardProps {
   title: string;
   children: React.ReactNode;
+  className?: string;
 }
 
-function AnimatedCard({ title, children }: AnimatedCardProps) {
+function AnimatedCard({ title, children, className }: AnimatedCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
+      className={className}
     >
       <Card className="bg-white/10 backdrop-blur-lg border-0">
         <CardHeader>

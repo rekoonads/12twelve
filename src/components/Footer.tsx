@@ -147,14 +147,6 @@ export default function Footer() {
       title: "Contact Us",
       content: (
         <>
-          <motion.a
-            href="tel:+918219084940"
-            className="flex items-center space-x-2 hover:text-purple-300 transition-colors mb-2"
-            whileHover={{ scale: 1.05 }}
-          >
-            <Phone className="w-4 h-4" />
-            <span>821-9084940</span>
-          </motion.a>
           <motion.p
             className="flex items-center space-x-2 text-sm text-purple-300"
             whileHover={{ scale: 1.05 }}
