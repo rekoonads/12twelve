@@ -79,7 +79,7 @@ export default function FrontPage() {
   }
 
   const navItems = [
-    { href: "/offers", label: "Offers" },
+    { href: "/12tv", label: "12TV" },
     { href: "/hiring", label: "Influencers" },
     { href: "/affiliate", label: "Affiliate" },
     { href: "#services", label: "Services" },
