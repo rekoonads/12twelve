@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { useState, useRef } from "react";
 import { ArrowRight } from "lucide-react";
 
@@ -11,36 +12,56 @@ const services = [
     description:
       "Maximize your brand's visibility on social platforms with tailored strategies that engage audiences and drive real-time interaction.",
     logo: "/socialmedia.png",
+    path: "/services/social-media-marketing",
   },
   {
     title: "Search Engine Optimization",
     description:
       "Achieve measurable success with performance-driven marketing campaigns, designed to deliver ROI through precise targeting and data analysis.",
     logo: "/seo.png",
+    path: "/services/search-engine-optimization",
   },
   {
     title: "Influencer Marketing",
     description:
       "Leverage the power of influencers to amplify your brand's message and connect authentically with your target audience for maximum reach.",
     logo: "/influencer.png",
+    path: "/services/influencer-marketing",
   },
   {
     title: "Website Design and Development",
     description:
       "Create a seamless user experience with beautifully designed and highly functional websites that capture your brand's essence.",
     logo: "/website.png",
+    path: "/services/website-design-development",
   },
   {
     title: "YouTube Monetisation",
     description:
       "Boost your online presence with strategic social media ads that target the right audience, driving clicks and conversions like never before.",
     logo: "/youtube.png",
+    path: "/services/youtube-monetisation",
   },
   {
     title: "Press Release",
     description:
       "Dominate search engines and increase visibility with expertly managed Google Ads campaigns designed to bring in qualified traffic and leads.",
     logo: "/press.png",
+    path: "/services/press-release",
+  },
+  {
+    title: "Digital Marketing",
+    description:
+      "Elevate your online presence with comprehensive digital marketing strategies that drive growth, engagement, and conversions across all digital channels.",
+    logo: "/digital-marketing.png",
+    path: "/services/digital-marketing",
+  },
+  {
+    title: "White Labeling",
+    description:
+      "Expand your service offerings with our white label solutions, allowing you to rebrand our high-quality services as your own and grow your business effortlessly.",
+    logo: "/white-labeling.png",
+    path: "/services/white-labeling",
   },
 ];
 
@@ -162,9 +183,11 @@ export default function Services() {
                 }}
                 transition={{ duration: 0.3 }}
               >
-                <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-2 rounded-full flex items-center transition-all duration-300 hover:from-purple-600 hover:to-pink-600 transform hover:scale-105">
-                  Learn More <ArrowRight className="ml-2 h-4 w-4" />
-                </button>
+                <Link href={service.path}>
+                  <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-2 rounded-full flex items-center transition-all duration-300 hover:from-purple-600 hover:to-pink-600 transform hover:scale-105">
+                    Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                  </button>
+                </Link>
               </motion.div>
               <motion.div
                 className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400"

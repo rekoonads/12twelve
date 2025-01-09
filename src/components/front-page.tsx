@@ -83,7 +83,7 @@ export default function FrontPage() {
     { href: "/hiring", label: "Influencers" },
     { href: "/affiliate", label: "Affiliate" },
     { href: "#services", label: "Services" },
-    { href: "#portfolio", label: "Portfolio" },
+    { href: "/pricing", label: "Pricing" },
     { href: "#blog", label: "Blog" },
     { href: "#contact", label: "Contact" },
   ];
