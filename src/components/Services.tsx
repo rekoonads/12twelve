@@ -42,13 +42,7 @@ const services = [
     logo: "/youtube.png",
     path: "/services/youtube-monetisation",
   },
-  {
-    title: "Press Release",
-    description:
-      "Dominate search engines and increase visibility with expertly managed Google Ads campaigns designed to bring in qualified traffic and leads.",
-    logo: "/press.png",
-    path: "/services/press-release",
-  },
+
   {
     title: "Digital Marketing",
     description:

@@ -204,10 +204,10 @@ export default function YouTubeMonetizationPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <h3 className="text-3xl font-bold mb-4">TechTalks Channel</h3>
+              <h3 className="text-3xl font-bold mb-4">aasthajain0</h3>
               <p className="text-xl mb-6">
-                See how we helped TechTalks increase their revenue by 500% and
-                grow their subscriber base to over 1 million in just 12 months.
+                See how we helped aasthajain0 increase their revenue by 500% and
+                grow their subscriber base to over 35k in just 2 months.
               </p>
               <ul className="space-y-2">
                 <li className="flex items-center">
@@ -216,7 +216,7 @@ export default function YouTubeMonetizationPage() {
                 </li>
                 <li className="flex items-center">
                   <ArrowRight className="w-5 h-5 mr-2 text-purple-300" />
-                  <span>1M+ subscribers gained</span>
+                  <span>30k+ subscribers gained</span>
                 </li>
                 <li className="flex items-center">
                   <ArrowRight className="w-5 h-5 mr-2 text-purple-300" />
@@ -238,10 +238,10 @@ export default function YouTubeMonetizationPage() {
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               <Image
-                src="/techtalks-growth.jpg"
-                alt="TechTalks Channel Growth Chart"
+                src="/aastha.png"
+                alt="Aastha  Growth Chart"
                 layout="fill"
-                objectFit="cover"
+                objectFit="contain"
                 className="rounded-lg shadow-2xl"
               />
             </motion.div>
@@ -276,7 +276,7 @@ export default function YouTubeMonetizationPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            - Sarah Johnson, Travel Vlogger
+            - Aastha Jain, Lifestyle Vlogger
           </motion.p>
         </div>
       </section>

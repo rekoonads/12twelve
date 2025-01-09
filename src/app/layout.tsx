@@ -122,6 +122,19 @@ export default function RootLayout({
               gtag('config', 'G-XMBMGG2511');
             `}
           </Script>
+          <Script id="crisp-widget" strategy="afterInteractive">
+            {`
+              window.$crisp=[];
+              window.CRISP_WEBSITE_ID="0b7fd68d-1042-4252-80f6-f98e83b61b53";
+              (function(){
+                const d = document;
+                const s = d.createElement("script");
+                s.src = "https://client.crisp.chat/l.js";
+                s.async = true;
+                d.getElementsByTagName("head")[0].appendChild(s);
+              })();
+            `}
+          </Script>
         </body>
       </html>
     </ClerkProvider>
