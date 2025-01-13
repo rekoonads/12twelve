@@ -108,7 +108,6 @@ export default function PricingPage() {
                 <h2 className="text-2xl font-bold mb-4">{plan.name}</h2>
                 <div className="mb-4">
                   <span className="text-4xl font-bold">${plan.price}</span>
-                  <span className="text-purple-300">/month</span>
                 </div>
                 <p className="text-sm text-purple-300 mb-6">
                   {plan.description}
