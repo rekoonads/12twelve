@@ -1,8 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
 import { Check, ArrowRight } from "lucide-react";
+import { conversionRates, currencySymbols } from "@/lib/currencyConverter";
+
+type Currency = "USD" | "NGN" | "INR" | "AED" | "GBP" | "PKR";
 
 const plans = [
   {
@@ -66,6 +70,8 @@ const plans = [
 ];
 
 export default function PricingPage() {
+  const [selectedCurrency, setSelectedCurrency] = useState<Currency>("USD");
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 to-indigo-900 text-white">
       <Navbar />
@@ -88,6 +94,24 @@ export default function PricingPage() {
           Your Growth, Our Strategy
         </motion.p>
 
+        <div className="mb-8 text-center">
+          <label htmlFor="currency-select" className="mr-2">
+            Select Currency:
+          </label>
+          <select
+            id="currency-select"
+            value={selectedCurrency}
+            onChange={(e) => setSelectedCurrency(e.target.value as Currency)}
+            className="bg-purple-800 text-white rounded p-2"
+          >
+            {Object.entries(currencySymbols).map(([code, symbol]) => (
+              <option key={code} value={code}>
+                {symbol} {code}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {plans.map((plan, index) => (
             <motion.div
@@ -107,7 +131,12 @@ export default function PricingPage() {
               <div className="p-6">
                 <h2 className="text-2xl font-bold mb-4">{plan.name}</h2>
                 <div className="mb-4">
-                  <span className="text-4xl font-bold">${plan.price}</span>
+                  <span className="text-4xl font-bold">
+                    {currencySymbols[selectedCurrency]}
+                    {(plan.price * conversionRates[selectedCurrency]).toFixed(
+                      2
+                    )}
+                  </span>
                 </div>
                 <p className="text-sm text-purple-300 mb-6">
                   {plan.description}
