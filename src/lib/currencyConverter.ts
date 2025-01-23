@@ -1,25 +1,45 @@
 type Currency = "USD" | "NGN" | "INR" | "AED" | "GBP" | "PKR";
 
-const conversionRates: Record<Currency, number> = {
-  USD: 1,
-  NGN: 1558.92,
-  INR: 86.45,
-  AED: 3.67, // Estimated conversion rate
-  GBP: 0.81,
-  PKR: 279.89,
+type PlanType = "youtube" | "growth" | "professional" | "premium";
+
+const regionalPrices: Record<Currency, Record<PlanType, number>> = {
+  USD: {
+    youtube: 1798,
+    growth: 3598,
+    professional: 5398,
+    premium: 8998,
+  },
+  NGN: {
+    youtube: 775545.8,
+    growth: 1552645.8,
+    professional: 2329745.8,
+    premium: 3883945.8,
+  },
+  INR: {
+    youtube: 58798,
+    growth: 116198,
+    professional: 176398,
+    premium: 292598,
+  },
+  AED: {
+    youtube: 5546,
+    growth: 11091,
+    professional: 17138,
+    premium: 28464,
+  },
+  GBP: {
+    youtube: 1678,
+    growth: 3358,
+    professional: 5038,
+    premium: 8398,
+  },
+  PKR: {
+    youtube: 209998,
+    growth: 419998,
+    professional: 629998,
+    premium: 1049998,
+  },
 };
-
-export { conversionRates };
-
-export function convertPrice(priceUSD: number, currency: Currency): string {
-  const convertedPrice = priceUSD * conversionRates[currency];
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: currency,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
-  }).format(convertedPrice);
-}
 
 export const currencySymbols: Record<Currency, string> = {
   USD: "$",
@@ -29,3 +49,19 @@ export const currencySymbols: Record<Currency, string> = {
   GBP: "£",
   PKR: "₨",
 };
+
+export function getPrice(
+  planType: PlanType,
+  currency: Currency,
+  applyDiscount = false
+): string {
+  const price = regionalPrices[currency][planType];
+  const finalPrice = applyDiscount ? price * 0.6 : price; // 40% discount when applied
+
+  return new Intl.NumberFormat(undefined, {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  }).format(finalPrice);
+}
+
+export { regionalPrices };

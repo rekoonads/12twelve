@@ -4,14 +4,15 @@ import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
 import { Check, ArrowRight } from "lucide-react";
-import { conversionRates, currencySymbols } from "@/lib/currencyConverter";
+import { currencySymbols, getPrice } from "@/lib/currencyConverter";
 
 type Currency = "USD" | "NGN" | "INR" | "AED" | "GBP" | "PKR";
+type PlanType = "youtube" | "growth" | "professional" | "premium";
 
 const plans = [
   {
     name: "YouTube Growth Package",
-    price: 499,
+    type: "youtube" as PlanType,
     description: "Includes 1000 Subscribers & 1000 Hours",
     features: [
       "50 Hours of Monthly Support",
@@ -25,7 +26,7 @@ const plans = [
   },
   {
     name: "Growth Package",
-    price: 999,
+    type: "growth" as PlanType,
     description: "For clients with more substantial needs",
     features: [
       "60 hours of work per month",
@@ -40,7 +41,7 @@ const plans = [
   },
   {
     name: "Professional Package",
-    price: 1499,
+    type: "professional" as PlanType,
     description: "For business professionals who need significant support",
     features: [
       "100 hours of work per month",
@@ -55,7 +56,7 @@ const plans = [
   },
   {
     name: "Premium Package",
-    price: 2499,
+    type: "premium" as PlanType,
     description: "Full month of service dedicated to one focus area",
     features: [
       "Video Editing",
@@ -71,6 +72,11 @@ const plans = [
 
 export default function PricingPage() {
   const [selectedCurrency, setSelectedCurrency] = useState<Currency>("USD");
+  const [isDiscountApplied, setIsDiscountApplied] = useState(false);
+
+  const applyDiscount = () => {
+    setIsDiscountApplied(!isDiscountApplied);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 to-indigo-900 text-white">
@@ -112,6 +118,15 @@ export default function PricingPage() {
           </select>
         </div>
 
+        <div className="mb-8 text-center">
+          <button
+            onClick={applyDiscount}
+            className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded transition duration-300"
+          >
+            {isDiscountApplied ? "Remove 40% Discount" : "Apply 40% Discount"}
+          </button>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {plans.map((plan, index) => (
             <motion.div
@@ -133,10 +148,14 @@ export default function PricingPage() {
                 <div className="mb-4">
                   <span className="text-4xl font-bold">
                     {currencySymbols[selectedCurrency]}
-                    {(plan.price * conversionRates[selectedCurrency]).toFixed(
-                      2
-                    )}
+                    {getPrice(plan.type, selectedCurrency, isDiscountApplied)}
                   </span>
+                  {isDiscountApplied && (
+                    <span className="ml-2 text-2xl text-gray-400 line-through">
+                      {currencySymbols[selectedCurrency]}
+                      {getPrice(plan.type, selectedCurrency)}
+                    </span>
+                  )}
                 </div>
                 <p className="text-sm text-purple-300 mb-6">
                   {plan.description}
@@ -158,14 +177,122 @@ export default function PricingPage() {
         </div>
 
         <motion.div
-          className="mt-12 text-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.8 }}
+          className="mt-16 py-16 bg-gradient-to-r from-purple-600 to-purple-500 rounded-lg"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
         >
-          <p className="text-lg mb-4">
-            Note: 18% GST is applicable on all plans
-          </p>
+          <div className="container mx-auto px-4">
+            <h2 className="text-4xl md:text-5xl font-bold text-center text-white mb-4">
+              Exclusive Free Perks with Every Package
+            </h2>
+            <p className="text-2xl md:text-3xl text-center text-yellow-300 font-bold mb-12">
+              Get more value as you upgrade
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Growth Package */}
+              <motion.div
+                className="bg-white rounded-lg p-8"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <h3 className="text-2xl font-bold text-purple-700 mb-6">
+                  Growth Package
+                </h3>
+                <h4 className="text-xl font-semibold text-gray-800 mb-4">
+                  Free Perks Included
+                </h4>
+                <ul className="space-y-4 text-gray-700">
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-purple-600 mr-2 mt-1 flex-shrink-0" />
+                    <span>
+                      Microsoft Office Premium upto 10 users per month
+                    </span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-purple-600 mr-2 mt-1 flex-shrink-0" />
+                    <span>Free Canvas Pro per month</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-purple-600 mr-2 mt-1 flex-shrink-0" />
+                    <span>30% on Adobe Licence</span>
+                  </li>
+                </ul>
+              </motion.div>
+
+              {/* Professional Package */}
+              <motion.div
+                className="bg-white rounded-lg p-8"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                <h3 className="text-2xl font-bold text-purple-700 mb-6">
+                  Professional Package
+                </h3>
+                <h4 className="text-xl font-semibold text-gray-800 mb-4">
+                  Free Perks Included
+                </h4>
+                <ul className="space-y-4 text-gray-700">
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-purple-600 mr-2 mt-1 flex-shrink-0" />
+                    <span>
+                      Microsoft Office Premium upto 20 users per month
+                    </span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-purple-600 mr-2 mt-1 flex-shrink-0" />
+                    <span>Free Canvas Pro per month</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-purple-600 mr-2 mt-1 flex-shrink-0" />
+                    <span>30% on Adobe Licence</span>
+                  </li>
+                </ul>
+              </motion.div>
+
+              {/* Premium Package */}
+              <motion.div
+                className="bg-white rounded-lg p-8"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+              >
+                <h3 className="text-2xl font-bold text-purple-700 mb-6">
+                  Premium Package
+                </h3>
+                <h4 className="text-xl font-semibold text-gray-800 mb-4">
+                  Free Perks Included
+                </h4>
+                <ul className="space-y-4 text-gray-700">
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-purple-600 mr-2 mt-1 flex-shrink-0" />
+                    <span>AWS Credits Upto $100K</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-purple-600 mr-2 mt-1 flex-shrink-0" />
+                    <span>
+                      Microsoft Office Premium upto 50 users per month
+                    </span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-purple-600 mr-2 mt-1 flex-shrink-0" />
+                    <span>Free Canvas Pro per month</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-purple-600 mr-2 mt-1 flex-shrink-0" />
+                    <span>30% on Adobe Licence</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-purple-600 mr-2 mt-1 flex-shrink-0" />
+                    <span>Stripe Credits $25K</span>
+                  </li>
+                </ul>
+              </motion.div>
+            </div>
+          </div>
         </motion.div>
 
         <motion.div
