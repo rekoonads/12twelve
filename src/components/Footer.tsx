@@ -11,6 +11,7 @@ import {
   Phone,
   MapPin,
   ChevronDown,
+  PhoneCall,
 } from "lucide-react";
 
 const ParticleAnimation = () => {
@@ -152,16 +153,22 @@ export default function Footer() {
             whileHover={{ scale: 1.05 }}
           >
             <MapPin className="w-4 h-4" />
-            <span>Delhi, India 110055</span>
+            <span>4501 23rd Avenue S Fargo, ND 58104</span>
           </motion.p>
+          <motion.a
+            href="tel:+12175688699"
+            className="flex items-center space-x-2 text-sm text-purple-300 mt-2"
+            whileHover={{ scale: 1.05 }}
+          >
+            <PhoneCall className="w-4 h-4" />
+            <span>+1 (217) 568-8699</span>
+          </motion.a>
           <div className="mt-4">
             <span className="text-sm">CIN:- U72900DL2021PTC388171</span>
             <br />
           </div>
           <div className="mt-2">
-            <span className="text-sm">
-              Company Name:- LEMONADE DIGITAL MEDIA TECHNOLOGY PRIVATE LIMITED
-            </span>
+            <span className="text-sm">Company Name:- 12Twelve</span>
           </div>
         </>
       ),
