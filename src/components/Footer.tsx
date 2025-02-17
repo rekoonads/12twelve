@@ -12,6 +12,7 @@ import {
   MapPin,
   ChevronDown,
   PhoneCall,
+  MailIcon,
 } from "lucide-react";
 
 const ParticleAnimation = () => {
@@ -163,13 +164,14 @@ export default function Footer() {
             <PhoneCall className="w-4 h-4" />
             <span>+1 (217) 568-8699</span>
           </motion.a>
-          <div className="mt-4">
-            <span className="text-sm">CIN:- U72900DL2021PTC388171</span>
-            <br />
-          </div>
-          <div className="mt-2">
-            <span className="text-sm">Company Name:- 12Twelve</span>
-          </div>
+          <motion.a
+            href="mailto:sales@my12twelve.com"
+            className="flex items-center space-x-2 text-sm text-purple-300 mt-2"
+            whileHover={{ scale: 1.05 }}
+          >
+            <MailIcon className="w-4 h-4" />
+            <span>sales@my12twelve.com</span>
+          </motion.a>
         </>
       ),
     },
