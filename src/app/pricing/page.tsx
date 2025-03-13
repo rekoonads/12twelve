@@ -3,8 +3,9 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
-import { Check, ArrowRight } from "lucide-react";
+import { Check, ArrowRight, ShoppingCart } from "lucide-react";
 import { currencySymbols, getPrice } from "@/lib/currencyConverter";
+import { getStripe } from "@/lib/stripe-client";
 
 type Currency = "USD" | "NGN" | "INR" | "AED" | "GBP" | "PKR";
 type PlanType = "youtube" | "growth" | "professional" | "premium";
@@ -73,9 +74,54 @@ const plans = [
 export default function PricingPage() {
   const [selectedCurrency, setSelectedCurrency] = useState<Currency>("USD");
   const [isDiscountApplied, setIsDiscountApplied] = useState(false);
+  const [isLoading, setIsLoading] = useState<PlanType | null>(null);
 
   const applyDiscount = () => {
     setIsDiscountApplied(!isDiscountApplied);
+  };
+
+  const handleCheckout = async (planType: PlanType) => {
+    setIsLoading(planType);
+
+    try {
+      // Create checkout session
+      const response = await fetch("/api/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          planType,
+          currency: selectedCurrency,
+          isDiscountApplied,
+        }),
+      });
+
+      const { sessionId, error } = await response.json();
+
+      if (error) {
+        console.error("Error creating checkout session:", error);
+        alert("Something went wrong. Please try again later.");
+        setIsLoading(null);
+        return;
+      }
+
+      // Redirect to Stripe Checkout
+      const stripe = await getStripe();
+      const { error: stripeError } = await stripe!.redirectToCheckout({
+        sessionId,
+      });
+
+      if (stripeError) {
+        console.error("Stripe checkout error:", stripeError);
+        alert("Something went wrong. Please try again later.");
+      }
+    } catch (error) {
+      console.error("Error during checkout:", error);
+      alert("Something went wrong. Please try again later.");
+    }
+
+    setIsLoading(null);
   };
 
   return (
@@ -171,6 +217,23 @@ export default function PricingPage() {
                 <div className="text-sm text-pink-300 mb-4">
                   Note: ads Budget will be provided by the client.
                 </div>
+                <button
+                  onClick={() => handleCheckout(plan.type)}
+                  disabled={isLoading === plan.type}
+                  className="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-4 rounded transition duration-300 flex items-center justify-center"
+                >
+                  {isLoading === plan.type ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2"></div>
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart className="w-5 h-5 mr-2" />
+                      Select Package
+                    </>
+                  )}
+                </button>
               </div>
             </motion.div>
           ))}

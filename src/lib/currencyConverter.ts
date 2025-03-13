@@ -2,7 +2,7 @@ type Currency = "USD" | "NGN" | "INR" | "AED" | "GBP" | "PKR";
 
 type PlanType = "youtube" | "growth" | "professional" | "premium";
 
-const regionalPrices: Record<Currency, Record<PlanType, number>> = {
+export const regionalPrices: Record<string, Record<string, number>> = {
   USD: {
     youtube: 1798,
     growth: 3598,
@@ -41,7 +41,7 @@ const regionalPrices: Record<Currency, Record<PlanType, number>> = {
   },
 };
 
-export const currencySymbols: Record<Currency, string> = {
+export const currencySymbols: Record<string, string> = {
   USD: "$",
   NGN: "₦",
   INR: "₹",
@@ -51,17 +51,27 @@ export const currencySymbols: Record<Currency, string> = {
 };
 
 export function getPrice(
-  planType: PlanType,
-  currency: Currency,
-  applyDiscount = false
+  planType: string,
+  currency: string,
+  isDiscountApplied = false
 ): string {
-  const price = regionalPrices[currency][planType];
-  const finalPrice = applyDiscount ? price * 0.6 : price; // 40% discount when applied
+  let price = regionalPrices[currency]?.[planType] || 0;
 
-  return new Intl.NumberFormat(undefined, {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
-  }).format(finalPrice);
+  if (isDiscountApplied) {
+    const discountRate = getDiscountRate(planType);
+    price = price * (1 - discountRate);
+  }
+
+  return price.toFixed(2);
 }
 
-export { regionalPrices };
+function getDiscountRate(planType: string): number {
+  const discountRates: Record<string, number> = {
+    youtube: 0.4,
+    growth: 0.4,
+    professional: 0.4,
+    premium: 0.4,
+  };
+
+  return discountRates[planType] || 0;
+}
